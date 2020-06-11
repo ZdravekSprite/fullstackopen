@@ -1,22 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const App = (props) => {
-  const {counter} = props
+const App = () => {
+  const [ counter, setCounter ] = useState(0)
+
+  setTimeout(
+    () => setCounter(counter + 1),
+    1000
+  )
+
   return (
     <div>{counter}</div>
   )
 }
 
-let counter = 1
-
-const refresh = () => {
-  ReactDOM.render(<App counter={counter} />, 
-  document.getElementById('root'))
-}
-
-refresh()
-setInterval(() => {
-  refresh()
-  counter += 1
-}, 1000)
+ReactDOM.render(
+  <App />, 
+  document.getElementById('root')
+)
