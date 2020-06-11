@@ -10,7 +10,13 @@ const App = (props) => {
 
 let counter = 1
 
-ReactDOM.render(
-  <App counter={counter} />, 
-  document.getElementById('root')
-)
+const refresh = () => {
+  ReactDOM.render(<App counter={counter} />, 
+  document.getElementById('root'))
+}
+
+refresh()
+setInterval(() => {
+  refresh()
+  counter += 1
+}, 1000)
