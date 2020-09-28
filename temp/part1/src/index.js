@@ -4,17 +4,16 @@ import ReactDOM from 'react-dom'
 const App = (props) => {
   const [value, setValue] = useState(10)
 
-  const handleClick = () => {
-    console.log('clicked the button')
-    setValue(0)
+  const setToValue = (newValue) => {
+    setValue(newValue)
   }
 
   return (
     <div>
       {value}
-      <button onClick={handleClick}>
-        reset to zero
-      </button>
+      <button onClick={() => setToValue(1000)}>thousand</button>
+      <button onClick={() => setToValue(0)}>reset</button>
+      <button onClick={() => setToValue(value + 1)}>increment</button>
     </div>
   )
 }
