@@ -20,8 +20,15 @@ const Content = ({ parts }) =>
 const Part = ({ part }) =>
   <p>{ part.name } { part.exercises }</p>
 
-const Total = ({ parts }) =>
-  <p><b>total of { parts.reduce((sum, parts) => sum + parts.exercises, 0) } exercises</b></p>
+const Total = ({ parts }) => {
+  const total = parts.reduce((s, p) => {
+    console.log('what is happening', s, p)
+    return s + p.exercises
+  }, 0)
+  return (
+    <p><b>total of { total } exercises</b></p>
+  )
+}
 
 const App = () => {
   const course = {
