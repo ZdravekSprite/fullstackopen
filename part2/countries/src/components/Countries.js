@@ -1,7 +1,7 @@
 import React from 'react'
 import Countrie from './Countrie'
 
-const Countries = ({ countries, showFilter }) => {
+const Countries = ({ countries, showFilter, setShowFilter }) => {
   const countriesToShow = (showFilter === '')
     ? countries
     : countries.filter(countrie => countrie.name.toUpperCase().includes(showFilter.toUpperCase()))
@@ -19,7 +19,12 @@ const Countries = ({ countries, showFilter }) => {
           ? tooMany
           : (countriesToShow.length < 2)
             ? oneCountrie
-            : countriesToShow.map((countrie, i) => <div key={i}>{countrie.name}</div>)
+            : countriesToShow.map((countrie, i) =>
+              <div key={i}>{countrie.name} 
+                <button onClick={() => setShowFilter(countrie.name)}>
+                  show
+                </button>
+              </div>)
         }
     </div>
   )

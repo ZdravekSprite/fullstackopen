@@ -30,6 +30,7 @@ const App = () => {
       <Countries
         countries={countries}
         showFilter={showFilter}
+        setShowFilter={setShowFilter.bind(this)}
        />
     </div>
   )
