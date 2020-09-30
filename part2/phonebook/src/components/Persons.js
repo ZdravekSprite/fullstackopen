@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Persons = ({ persons, showFilter}) => {
+const Persons = ({ persons, showFilter }) => {
   const personsToShow = (showFilter === '')
     ? persons
     : persons.filter(person => person.name.toUpperCase().includes(showFilter.toUpperCase()))
