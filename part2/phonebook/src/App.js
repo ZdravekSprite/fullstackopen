@@ -5,49 +5,59 @@ import Persons from './components/Persons'
 import personService from './services/persons'
 
 const App = () => {
-  const [ persons, setPersons ] = useState([])
-  const [ newName, setNewName ] = useState('')
-  const [ newNumber, setNewNumber ] = useState('')
-  const [ showFilter, setShowFilter ] = useState('')
+  const [persons, setPersons] = useState([])
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [showFilter, setShowFilter] = useState('')
 
   useEffect(() => {
     personService
-    .getAll()
-    .then(initialPersons => {
-      setPersons(initialPersons)
-    })
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
   }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
+
+    const personObject = {
+      name: newName,
+      number: newNumber
+    }
+
     if (persons.map(person => person.name).indexOf(newName) >= 0) {
-      window.alert(`${newName} is already added to phonebook`);
-    } else {
-      const personObject = {
-        name: newName,
-        number: newNumber
+      const person = persons.find(p => p.name === newName)
+      //window.alert(`${newName} is already added to phonebook`);
+      if (window.confirm(newName + ' is already sdded to phonebook, replace the old number with a new one?')) {
+        personService
+          .update(person.id, personObject)
+          .then(returnedPerson => {
+            setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
+          })
       }
 
+    } else {
       personService
-      .create(personObject)
-      .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson))
-        setNewName('')
-        setNewNumber('')
-      })
+        .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
     }
   }
 
   const deletePerson = (id) => {
     const person = persons.find(p => p.id === id)
 
-    if (window.confirm('Delete '+person.name+'?')) { 
+    if (window.confirm('Delete ' + person.name + '?')) {
       personService
-      .erase(id)
-      .then(returnedStatus => {
-        console.log('status', returnedStatus)
-        setPersons(persons.filter(p => p.id !== id))
-      })
+        .erase(id)
+        .then(returnedStatus => {
+          console.log('status', returnedStatus)
+          setPersons(persons.filter(p => p.id !== id))
+        })
       //console.log(id)
     }
   }
