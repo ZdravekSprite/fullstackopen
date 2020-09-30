@@ -21,14 +21,8 @@
     {
       "content": "POST is used to add data to a REST api",
       "date": "2020-09-30T16:36:10.796Z",
-      "important": true,
+      "important": false,
       "id": 4
-    },
-    {
-      "content": "",
-      "date": "2020-09-30T16:37:59.103Z",
-      "important": true,
-      "id": 5
     }
   ]
 }
