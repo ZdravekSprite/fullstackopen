@@ -1,25 +1,27 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const App = (props) => {
-  const [clicks, setClicks] = useState({
-    left: 0, right: 0
-  })
+const Display = props => <div>{props.value}</div>
 
-  const handleLeftClick = () =>
-    setClicks({ ...clicks, left: clicks.left + 1 })
+const Button = (props) => (
+  <button onClick={props.handleClick}>
+    {props.text}
+  </button>
+)
 
-  const handleRightClick = () =>
-    setClicks({ ...clicks, right: clicks.right + 1 })
+const App = props => {
+  const [value, setValue] = useState(10)
+
+  const setToValue = newValue => {
+    setValue(newValue)
+  }
 
   return (
     <div>
-      <div>
-        {clicks.left}
-        <button onClick={handleLeftClick}>left</button>
-        <button onClick={handleRightClick}>right</button>
-        {clicks.right}
-      </div>
+      <Display value={value} />
+      <Button handleClick={() => setToValue(1000)} text="thousand" />
+      <Button handleClick={() => setToValue(0)} text="reset" />
+      <Button handleClick={() => setToValue(value + 1)} text="increment" />
     </div>
   )
 }
