@@ -20,6 +20,15 @@ const App = () => {
       })
   }, [])
 
+  const goodChange = (msg) => {
+    setNewName('')
+    setNewNumber('')
+    setNotificationMessage([msg, true])
+    setTimeout(() => {
+      setNotificationMessage(null)
+    }, 5000)
+  }
+
   const addPerson = (event) => {
     event.preventDefault()
 
@@ -31,17 +40,19 @@ const App = () => {
     if (persons.map(person => person.name).indexOf(newName) >= 0) {
       const person = persons.find(p => p.name === newName)
       //window.alert(`${newName} is already added to phonebook`);
-      if (window.confirm(newName + ' is already sdded to phonebook, replace the old number with a new one?')) {
+      if (window.confirm(newName + ' is already added to phonebook, replace the old number with a new one?')) {
         personService
           .update(person.id, personObject)
           .then(returnedPerson => {
             setPersons(persons.map(p => p.id !== person.id ? p : returnedPerson))
-            setNewName('')
-            setNewNumber('')
-            setNotificationMessage([`Updated ${newName}`, true])
+            goodChange(`Updated ${newName}`)
+          })
+          .catch(error => {
+            setNotificationMessage([`Information of ${newName} has already been removed from server`, false])
             setTimeout(() => {
               setNotificationMessage(null)
             }, 5000)
+            setPersons(persons.filter(p => p.id !== person.id))
           })
         }
 
@@ -50,12 +61,7 @@ const App = () => {
         .create(personObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
-          setNewName('')
-          setNewNumber('')
-          setNotificationMessage([`Added ${newName}`, true])
-          setTimeout(() => {
-            setNotificationMessage(null)
-          }, 5000)
+          goodChange(`Added ${newName}`)
         })
       }
   }
