@@ -1,33 +1,15 @@
-require('dotenv').config()
 const express = require('express')
 const app = express()
-
-const mongoose = require('mongoose')
-
-const url = process.env.MONGODB_URI
-
-console.log('connecting to', url)
-
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(result => {
-    console.log('connected to MongoDB')
-  })
-  .catch((error) => {
-    console.log('error connecting to MongoDB:', error.message)
-  })
-
-const noteSchema = new mongoose.Schema({
-  content: String,
-  date: Date,
-  important: Boolean,
-})
-
-const Note = mongoose.model('Note', noteSchema)
+const bodyParser = require('body-parser')
+require('dotenv').config()
+const Note = require('./models/note')
 
 const cors = require('cors')
 
 app.use(cors())
-app.use(express.json())
+
+app.use(bodyParser.json())
+
 app.use(express.static('build'))
 
 
@@ -96,7 +78,7 @@ app.delete('/api/notes/:id', (request, response) => {
   response.status(204).end()
 })
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT 
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
