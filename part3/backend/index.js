@@ -2,17 +2,11 @@ const express = require('express')
 var morgan = require('morgan')
 
 const app = express()
+const cors = require('cors')
 
+app.use(cors())
 app.use(express.json())
-//app.use(morgan('tiny'))
-//app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
-//app.use(morgan(function (req, res) { return req.body }))
-/*
-app.use(morgan('tiny', {
-  skip: function (req, res) { return req.method == "POST"}
-}))
-*/
-//  console.log(JSON.stringify(body))
+
 morgan.token('body', function getBody (req) {
   if (req.method != 'POST') {
     return " "
