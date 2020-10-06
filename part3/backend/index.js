@@ -1,9 +1,26 @@
 const express = require('express')
 var morgan = require('morgan')
+
 const app = express()
 
 app.use(express.json())
-app.use(morgan('tiny'))
+//app.use(morgan('tiny'))
+//app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
+//app.use(morgan(function (req, res) { return req.body }))
+/*
+app.use(morgan('tiny', {
+  skip: function (req, res) { return req.method == "POST"}
+}))
+*/
+//  console.log(JSON.stringify(body))
+morgan.token('body', function getBody (req) {
+  if (req.method != 'POST') {
+    return " "
+  }
+  return JSON.stringify(req.body)
+})
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 let persons = [
   {
@@ -85,7 +102,14 @@ app.post('/api/persons', (req, res) => {
     name: body.name,
     number: body.number,
   }
-
+/*
+  const postData = {
+    name: body.name,
+    number: body.number,
+  }
+  console.log(JSON.stringify(postData))
+*/
+//  console.log(JSON.stringify(body))
   persons = persons.concat(person)
 
   res.json(person)
