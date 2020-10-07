@@ -70,6 +70,9 @@ const App = () => {
           notifyWith(`Changed number of  ${existing.name}`)
           setNewName('')
           setNewNumber('')
+        }).catch(error => {
+          console.log(error.response.data.error)
+          notifyWith(`${error.response.data.error} `, 'error')
         })
       }
 
