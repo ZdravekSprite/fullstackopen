@@ -19,7 +19,7 @@ morgan.token('body', function getBody (req) {
 })
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
-
+/*
 let persons = [
   {
     id: 1,
@@ -42,7 +42,7 @@ let persons = [
     number: "39-23-6423122"
   }
 ]
-
+*/
 app.get('/', (req, res) => {
   res.send('<h1>Phonebook!</h1>')
 })
@@ -61,21 +61,6 @@ app.get('/api/persons', (req, res) => {
   })
 })
 
-app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const person = persons.find(person => person.id === id)
-  if (person) {
-    res.json(person)
-  } else {
-    res.status(404).end()
-  }
-})
-
-const generateId = () => {
-  const randomId = Math.floor(Math.random() * Math.floor(999999))
-  return randomId
-}
-
 app.post('/api/persons', (req, res) => {
   const body = req.body
 
@@ -90,23 +75,38 @@ app.post('/api/persons', (req, res) => {
       error: 'number is missing' 
     })
   }
-
+/*
   if (persons.find(p => p.name === body.name)) {
     return res.status(400).json({ 
       error: 'name must be unique' 
     })
   }
-
-  const person = {
-    id: generateId(),
+*/
+  const person = new Person({
     name: body.name,
     number: body.number,
-  }
-  persons = persons.concat(person)
+  })
 
-  res.json(person)
+  person.save().then(savedPerson => {
+    res.json(savedPerson.toJSON())
+  })
 })
 
+app.get('/api/persons/:id', (req, res) => {
+  const id = Number(req.params.id)
+  const person = persons.find(person => person.id === id)
+  if (person) {
+    res.json(person)
+  } else {
+    res.status(404).end()
+  }
+})
+/*
+const generateId = () => {
+  const randomId = Math.floor(Math.random() * Math.floor(999999))
+  return randomId
+}
+*/
 app.delete('/api/persons/:id', (req, res) => {
   const id = Number(req.params.id)
   persons = persons.filter(person => person.id !== id)
