@@ -1,38 +1,13 @@
 const express = require('express')
 const app = express()
-const bodyParser = require('body-parser')
 require('dotenv').config()
 const Note = require('./models/note')
 
 const cors = require('cors')
 
 app.use(cors())
-
-app.use(bodyParser.json())
-
+app.use(express.json())
 app.use(express.static('build'))
-
-
-let notes = [
-  {
-    id: 1,
-    content: "HTML is easy",
-    date: "2020-01-10T17:30:31.098Z",
-    important: true
-  },
-  {
-    id: 2,
-    content: "Browser can execute only Javascript",
-    date: "2020-01-10T18:39:34.091Z",
-    important: false
-  },
-  {
-    id: 3,
-    content: "GET and POST are the most important methods of HTTP protocol",
-    date: "2020-01-10T19:20:14.298Z",
-    important: true
-  }
-]
 
 app.get('/api/notes', (request, response) => {
   Note.find({}).then(notes => {
@@ -76,6 +51,12 @@ app.delete('/api/notes/:id', (request, response) => {
 
   response.status(204).end()
 })
+
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
 
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
