@@ -41,7 +41,6 @@ const mostBlogs = (blogs) => {
           blogs: _.map(items, 'author').length
         };
       }).value()
-    //console.log(_.maxBy(test, 'blogs'))
     return _.maxBy(test, 'blogs')
   }
 }
