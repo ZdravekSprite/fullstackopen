@@ -4,9 +4,9 @@
   "description": "blog list application",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "test": "jest --verbose"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
   },
   "author": "Zdravko Šplajt",
   "license": "MIT",
@@ -18,6 +18,7 @@
     "mongoose": "^5.10.8"
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
     "jest": "^26.5.2",
     "nodemon": "^2.0.4"
   },
