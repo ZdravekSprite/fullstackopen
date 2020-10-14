@@ -24,10 +24,18 @@ describe('step1', () => {
   })
 
   test('all blogs are returned', async () => {
-    const response = await api.get('/api/blogs')
+    const res = await api.get('/api/blogs')
 
-    expect(response.body).toHaveLength(helper.initialBlogs.length)
+    expect(res.body).toHaveLength(helper.initialBlogs.length)
   })
+})
+
+describe('step2', () => {
+  test('the unique identifier property of the blog posts is named id', async () => {
+    const res = await api.get('/api/blogs')
+
+    expect(res.body[0].id).toBeDefined();
+  });
 })
 
 afterAll(() => {
