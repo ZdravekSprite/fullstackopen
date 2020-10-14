@@ -1,10 +1,16 @@
 const Blog = require('../models/blog')
 
 const oneBlog = {
-  title: "React patterns",
-  author: "Michael Chan",
-  url: "https://reactpatterns.com/",
+  title: "Test blog title",
+  author: "test blog author",
+  url: "https://test.blog.com/",
   likes: 7
+}
+
+const noLikesBlog = {
+  title: "Test blog title",
+  author: "test blog author",
+  url: "https://test.blog.com/"
 }
 
 const initialBlogs = [
@@ -64,5 +70,5 @@ const blogsInDb = async () => {
 }
 
 module.exports = {
-  initialBlogs, oneBlog, blogsInDb
+  initialBlogs, oneBlog, blogsInDb, noLikesBlog
 }

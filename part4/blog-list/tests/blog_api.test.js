@@ -54,8 +54,6 @@ describe('step3', () => {
     await api
       .post('/api/blogs')
       .send(helper.oneBlog)
-      .expect(201)
-      .expect('Content-Type', /application\/json/)
   
     const blogsAtEnd = await helper.blogsInDb()
     const lastBlog = blogsAtEnd[blogsAtEnd.length - 1]
@@ -64,7 +62,21 @@ describe('step3', () => {
     expect(lastBlog.url).toBe(helper.oneBlog.url)
     expect(lastBlog.likes).toBe(helper.oneBlog.likes)
   })
+})
+
+describe('step4', () => {
+  test('default likes property to the value 0', async () => {
+    await api
+      .post('/api/blogs')
+      .send(helper.noLikesBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
   
+    const blogsAtEnd = await helper.blogsInDb()
+    const lastBlog = blogsAtEnd[blogsAtEnd.length - 1]
+    expect(lastBlog.likes).toBeDefined()
+    expect(lastBlog.likes).toBe(0)
+  })
 })
 
 afterAll(() => {
