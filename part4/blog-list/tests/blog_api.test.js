@@ -115,9 +115,28 @@ describe('deletion of a blog', () => {
       helper.initialBlogs.length - 1
     )
 
-    const urls = blogsAtEnd.map(r => r.url)
+    const urls = blogsAtEnd.map(b => b.url)
 
     expect(urls).not.toContain(blogToDelete.url)
+  })
+})
+
+describe('updating the information of an individual blog post', () => {
+  test('put', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    let blogToUpdate = blogsAtStart[0]
+    blogToUpdate.likes = blogToUpdate.likes + 1
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(200)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    const blogs = blogsAtEnd.find(b => b.id === blogToUpdate.id)
+
+    expect(blogs).toBeDefined()
   })
 })
 
