@@ -38,6 +38,35 @@ describe('step2', () => {
   });
 })
 
+describe('step3', () => {
+  test('a blog can be added', async () => {
+    await api
+      .post('/api/blogs')
+      .send(helper.oneBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+  })
+  
+  test('the content of the blog post is saved correctly to the database', async () => {
+    await api
+      .post('/api/blogs')
+      .send(helper.oneBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+  
+    const blogsAtEnd = await helper.blogsInDb()
+    const lastBlog = blogsAtEnd[blogsAtEnd.length - 1]
+    expect(lastBlog.title).toBe(helper.oneBlog.title)
+    expect(lastBlog.author).toBe(helper.oneBlog.author)
+    expect(lastBlog.url).toBe(helper.oneBlog.url)
+    expect(lastBlog.likes).toBe(helper.oneBlog.likes)
+  })
+  
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
