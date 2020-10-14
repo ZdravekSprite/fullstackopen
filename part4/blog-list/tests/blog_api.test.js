@@ -66,11 +66,12 @@ describe('step3', () => {
 
 describe('step4', () => {
   test('default likes property to the value 0', async () => {
+    const testBlog = helper.oneBlog
+    delete testBlog.likes
     await api
       .post('/api/blogs')
-      .send(helper.noLikesBlog)
+      .send(testBlog)
       .expect(201)
-      .expect('Content-Type', /application\/json/)
   
     const blogsAtEnd = await helper.blogsInDb()
     const lastBlog = blogsAtEnd[blogsAtEnd.length - 1]
@@ -79,6 +80,25 @@ describe('step4', () => {
   })
 })
 
+describe('step5', () => {
+  test('title properties are missing', async () => {
+    const testBlog = helper.oneBlog
+    delete testBlog.title
+    await api
+      .post('/api/blogs')
+      .send(testBlog)
+      .expect(400)
+  })
+
+  test('url properties are missing', async () => {
+    const testBlog = helper.oneBlog
+    delete testBlog.url
+    await api
+      .post('/api/blogs')
+      .send(testBlog)
+      .expect(400)
+  })
+})
 afterAll(() => {
   mongoose.connection.close()
 })
