@@ -11,10 +11,10 @@ const App = () => {
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
 
-  const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     blogService
@@ -31,8 +31,17 @@ const App = () => {
     }
   }, [])
 
+  const notifyWith = (message, type='success') => {
+    console.log(message)
+    setNotification({ message, type })
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
+  }
+
   const addBlog = (event) => {
     event.preventDefault()
+
     const blogObject = {
       title: newTitle,
       author: newAuthor,
@@ -43,9 +52,13 @@ const App = () => {
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
+        notifyWith(`a new blog ${newTitle} by ${newAuthor} added`)
         setNewTitle('')
         setNewAuthor('')
         setNewUrl('')
+      })
+      .catch(error => {
+        notifyWith(`${error.response.data.error} `, 'error')
       })
   }
 
@@ -65,10 +78,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      notifyWith(`wrong username or password`, 'error')
     }
   }
 
@@ -108,8 +118,8 @@ const App = () => {
   if (user === null) {
     return (
       <div>
-        <h2>Log in to application</h2>
-        <Notification message={errorMessage} />
+        <h2>log in to application</h2>
+        <Notification notification={notification} />
         {loginForm()}
       </div>
     )
@@ -118,7 +128,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      <Notification message={errorMessage} />
+      <Notification notification={notification} />
       <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
       <h2>create new</h2>
       <BlogForm
