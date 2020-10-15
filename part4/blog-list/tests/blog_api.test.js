@@ -6,6 +6,9 @@ const api = supertest(app)
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const Blog = require('../models/blog')
+const jwt = require('jsonwebtoken')
+
+const token = jwt.sign({ username: 'root', id: "5f8838eb62bc3e13209c60a6" }, process.env.SECRET)
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -54,6 +57,7 @@ describe('step3', () => {
   test('a blog can be added', async () => {
     await api
       .post('/api/blogs')
+      .set('Authorization', 'bearer '+token)
       .send(helper.oneBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -65,6 +69,7 @@ describe('step3', () => {
   test('the content of the blog post is saved correctly to the database', async () => {
     await api
       .post('/api/blogs')
+      .set('Authorization', 'bearer '+token)
       .send(helper.oneBlog)
   
     const blogsAtEnd = await helper.blogsInDb()
@@ -82,6 +87,7 @@ describe('step4', () => {
     delete testBlog.likes
     await api
       .post('/api/blogs')
+      .set('Authorization', 'bearer '+token)
       .send(testBlog)
       .expect(201)
   
@@ -98,6 +104,7 @@ describe('step5', () => {
     delete testBlog.title
     await api
       .post('/api/blogs')
+      .set('Authorization', 'bearer '+token)
       .send(testBlog)
       .expect(400)
   })
@@ -107,6 +114,7 @@ describe('step5', () => {
     delete testBlog.url
     await api
       .post('/api/blogs')
+      .set('Authorization', 'bearer '+token)
       .send(testBlog)
       .expect(400)
   })
@@ -119,6 +127,7 @@ describe('deletion of a blog', () => {
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', 'bearer '+token)
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
@@ -141,6 +150,7 @@ describe('updating the information of an individual blog post', () => {
 
     await api
       .put(`/api/blogs/${blogToUpdate.id}`)
+      .set('Authorization', 'bearer '+token)
       .send(blogToUpdate)
       .expect(200)
 
@@ -149,6 +159,15 @@ describe('updating the information of an individual blog post', () => {
     const blogs = blogsAtEnd.find(b => b.id === blogToUpdate.id)
 
     expect(blogs).toBeDefined()
+  })
+})
+
+describe('Unauthorized', () => {
+  test('adding a blog fails if a token is not provided', async () => {
+    await api
+      .post('/api/blogs')
+      .send(helper.oneBlog)
+      .expect(401)
   })
 })
 
