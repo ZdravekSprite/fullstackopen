@@ -3,11 +3,23 @@ const supertest = require('supertest')
 const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
-
+const bcrypt = require('bcrypt')
+const User = require('../models/user')
 const Blog = require('../models/blog')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
+
+  const passwordHash = await bcrypt.hash('sekret', 10)
+  const user = new User({
+    _id: "5f8838eb62bc3e13209c60a6",
+    username: 'root',
+    name: 'Superuser',
+    passwordHash
+  })
+
+  await user.save()
 
   for (let blog of helper.initialBlogs) {
     let blogObject = new Blog(blog)
