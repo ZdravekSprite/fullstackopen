@@ -39,27 +39,23 @@ const App = () => {
     }, 5000)
   }
 
-  const addBlog = (event) => {
+  const addBlog = async (event) => {
     event.preventDefault()
 
-    const blogObject = {
-      title: newTitle,
-      author: newAuthor,
-      url: newUrl
+    try {
+      const newBlog = await blogService.create({
+        title: newTitle,
+        author: newAuthor,
+        url: newUrl
+      })
+      setBlogs(blogs.concat(newBlog))
+      notifyWith(`a new blog ${newTitle} by ${newAuthor} added`)
+      setNewTitle('')
+      setNewAuthor('')
+      setNewUrl('')
+    } catch (error) {
+      notifyWith(`${error.response.data.error}`, 'error')
     }
-
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        notifyWith(`a new blog ${newTitle} by ${newAuthor} added`)
-        setNewTitle('')
-        setNewAuthor('')
-        setNewUrl('')
-      })
-      .catch(error => {
-        notifyWith(`${error.response.data.error} `, 'error')
-      })
   }
 
   const handleLogin = async (event) => {
@@ -77,8 +73,8 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-    } catch (exception) {
-      notifyWith(`wrong username or password`, 'error')
+    } catch (error) {
+      notifyWith(`${error.response.data.error}`, 'error')
     }
   }
 
