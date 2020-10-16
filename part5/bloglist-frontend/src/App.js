@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -15,6 +16,8 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [notification, setNotification] = useState(null)
+
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService
@@ -50,6 +53,7 @@ const App = () => {
       })
       setBlogs(blogs.concat(newBlog))
       notifyWith(`a new blog ${newTitle} by ${newAuthor} added`)
+      blogFormRef.current.toggleVisibility()
       setNewTitle('')
       setNewAuthor('')
       setNewUrl('')
@@ -126,16 +130,17 @@ const App = () => {
       <h2>blogs</h2>
       <Notification notification={notification} />
       <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
-      <h2>create new</h2>
-      <BlogForm
-        handleTitleChange={handleTitleChange}
-        newTitle={newTitle}
-        handleAuthorChange={handleAuthorChange}
-        newAuthor={newAuthor}
-        handleUrlChange={handleUrlChange}
-        newUrl={newUrl}
-        addBlog={addBlog}
-      />
+      <Togglable buttonLabel="new blog" ref={blogFormRef}>
+        <BlogForm
+          handleTitleChange={handleTitleChange}
+          newTitle={newTitle}
+          handleAuthorChange={handleAuthorChange}
+          newAuthor={newAuthor}
+          handleUrlChange={handleUrlChange}
+          newUrl={newUrl}
+          addBlog={addBlog}
+        />
+      </Togglable>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
