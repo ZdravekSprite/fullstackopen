@@ -12,7 +12,7 @@ const Blog = ({ blog, del }) => {
     setVisible(!visible)
   }
 
-  let blogStyle = {
+  const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
     border: 'solid',
@@ -70,13 +70,13 @@ const Blog = ({ blog, del }) => {
 
   return (
     <div style={blogStyle}>
-      <div style={hideWhenVisible}>
+      <div className='blog_view' style={hideWhenVisible}>
         {blog.title} {blog.author}<button onClick={toggleVisibility}>view</button>
       </div>
-      <div style={showWhenVisible}>
+      <div className='blog_hide' style={showWhenVisible}>
         {blog.title} {blog.author}<button onClick={toggleVisibility}>hide</button><br/>
         {blog.url}<br/>
-        {likes}<button onClick={likeBlog}>like</button><br/>
+        <span className='likes'>{likes}</span><button onClick={likeBlog}>like</button><br/>
         {blog.author}<br/>
         {deleteButton()}
       </div>
