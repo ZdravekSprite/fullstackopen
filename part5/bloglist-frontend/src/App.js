@@ -30,7 +30,7 @@ const App = () => {
     }
   }, [])
 
-  const notifyWith = (message, type='success') => {
+  const notifyWith = (message, type = 'success') => {
     console.log(message)
     setNotification({ message, type })
     setTimeout(() => {
@@ -60,6 +60,7 @@ const App = () => {
       window.localStorage.setItem(
         'loggedNoteappUser', JSON.stringify(user)
       )
+      blogService.setToken(user.token)
 
       setUser(user)
       setUsername('')
@@ -72,6 +73,13 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('loggedNoteappUser')
     setUser(null)
+    blogService.deleteToken(null)
+  }
+
+  const handleDelete = () => {
+    blogService
+      .getAll()
+      .then(blogs => setBlogs(blogs))
   }
 
   const loginForm = () => (
@@ -113,11 +121,11 @@ const App = () => {
       <h2>blogs</h2>
       <Notification notification={notification} />
       <p>{user.name} logged in <button onClick={handleLogout}>logout</button></p>
-      <Togglable buttonLabel="new blog" ref={blogFormRef}>
+      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <BlogForm createBlog={addBlog} />
       </Togglable>
       {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} del={handleDelete}/>
       )}
     </div>
   )

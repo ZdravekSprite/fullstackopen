@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
+import ReactDOM from 'react-dom'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, del }) => {
   const [visible, setVisible] = useState(false)
   const [likes, setLikes] = useState(blog.likes)
 
@@ -12,7 +13,7 @@ const Blog = ({ blog }) => {
     setVisible(!visible)
   }
 
-  const blogStyle = {
+  let blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
     border: 'solid',
@@ -29,6 +30,14 @@ const Blog = ({ blog }) => {
     }
   }
 
+  const deleteBlog = async (blogObject) => {
+    try {
+      await blogService.remove(blogObject)
+      del()
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
 
   const likeBlog = (event) => {
     event.preventDefault()
@@ -42,6 +51,24 @@ const Blog = ({ blog }) => {
     })
   }
 
+  const removeBlog = (event) => {
+    event.preventDefault()
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) { 
+      deleteBlog({
+        id: blog.id,
+        user: blog.user.id,
+        title: blog.title,
+        author: blog.author
+      })
+    }
+  }
+
+  const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+  const user = JSON.parse(loggedUserJSON)
+  const deleteButton = () => (user.username === blog.user.username)
+    ? <button onClick={removeBlog}>remove</button>
+    : ""
+
   return (
     <div style={blogStyle}>
       <div style={hideWhenVisible}>
@@ -52,6 +79,7 @@ const Blog = ({ blog }) => {
         {blog.url}<br/>
         {likes}<button onClick={likeBlog}>like</button><br/>
         {blog.author}<br/>
+        {deleteButton()}
       </div>
     </div>
   )
