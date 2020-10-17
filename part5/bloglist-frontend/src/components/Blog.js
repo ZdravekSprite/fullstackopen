@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
-import ReactDOM from 'react-dom'
 
 const Blog = ({ blog, del }) => {
   const [visible, setVisible] = useState(false)
