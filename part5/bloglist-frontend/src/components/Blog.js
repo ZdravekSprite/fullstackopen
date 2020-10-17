@@ -52,7 +52,7 @@ const Blog = ({ blog, del }) => {
 
   const removeBlog = (event) => {
     event.preventDefault()
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) { 
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
       deleteBlog({
         id: blog.id,
         user: blog.user.id,
@@ -66,7 +66,7 @@ const Blog = ({ blog, del }) => {
   const user = JSON.parse(loggedUserJSON)
   const deleteButton = () => (user.username === blog.user.username)
     ? <button onClick={removeBlog}>remove</button>
-    : ""
+    : ''
 
   return (
     <div style={blogStyle}>
