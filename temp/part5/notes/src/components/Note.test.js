@@ -43,12 +43,12 @@ test('clicking the button calls event handler once', () => {
 
   const mockHandler = jest.fn()
 
-  const component = render(
+  const { getByText } = render(
     <Note note={note} toggleImportance={mockHandler} />
   )
 
-  const button = component.getByText('make not important')
+  const button = getByText('make not important')
   fireEvent.click(button)
 
-  expect(mockHandler.mock.calls).toHaveLength(1)
+  expect(mockHandler.mock.calls.length).toBe(1)
 })
