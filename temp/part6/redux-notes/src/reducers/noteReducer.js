@@ -27,7 +27,6 @@ export const createNote = (data) => {
   }
 }
 
-
 export const toggleImportanceOf = (id) => {
   return {
     type: 'TOGGLE_IMPORTANCE',
