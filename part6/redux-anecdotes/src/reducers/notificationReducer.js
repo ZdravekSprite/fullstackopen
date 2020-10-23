@@ -4,8 +4,8 @@ const notificationReducer = (state = null, action) => {
 
   switch (action.type) {
     case 'SHOW':
-      return action.data
     case 'HIDE':
+      return action.data
     default:
       return null
   }
