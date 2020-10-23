@@ -26,9 +26,17 @@ const Notes = (props) => {
 }
 
 const mapStateToProps = (state) => {
+  if ( state.filter === 'ALL' ) {
+    return {
+      notes: state.notes
+    }
+  }
+
   return {
-    notes: state.notes,
-    filter: state.filter,
+    notes: (state.filter  === 'IMPORTANT' 
+    ? state.notes.filter(note => note.important)
+    : state.notes.filter(note => !note.important)
+    )
   }
 }
 
