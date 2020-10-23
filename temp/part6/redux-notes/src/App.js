@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import NewNote from './components/NewNote'
+import NewNote from './components/ConnectedNewNote'
 import Notes from './components/ConnectedNotes'
 import VisibilityFilter from './components/VisibilityFilter'
 import { initializeNotes } from './reducers/noteReducer'
