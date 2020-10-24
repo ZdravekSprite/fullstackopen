@@ -1,82 +1,41 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const useCounter = () => {
-  const [value, setValue] = useState(0)
+const useField = (type) => {
+  const [value, setValue] = useState('')
 
-  const increase = () => {
-    setValue(value + 1)
-  }
-
-  const decrease = () => {
-    setValue(value - 1)
-  }
-
-  const zero = () => {
-    setValue(0)
+  const onChange = (event) => {
+    setValue(event.target.value)
   }
 
   return {
+    type,
     value,
-    increase,
-    decrease,
-    zero
+    onChange
   }
 }
 
 const App = () => {
-  const counter = useCounter()
-
-  const left = useCounter()
-  const right = useCounter()
-
-  const [name, setName] = useState('')
-  const [born, setBorn] = useState('')
-  const [height, setHeight] = useState('')
+  const name = useField('text')
+  const born = useField('date')
+  const height = useField('number')
 
   return (
-    <>
+    <div>
+      <form>
+        name: 
+        <input {...name} /> 
+        <br/> 
+        birthdate:
+        <input {...born} />
+        <br /> 
+        height:
+        <input {...height} />
+      </form>
       <div>
-        <div>{counter.value}</div>
-        <button onClick={counter.increase}>plus</button>
-        <button onClick={counter.decrease}>minus</button>
-        <button onClick={counter.zero}>zero</button>
+        {name.value} {born.value} {height.value}
       </div>
-      <div>
-        {left.value}
-        <button onClick={left.increase}>left</button>
-        <button onClick={right.increase}>right</button>
-        {right.value}
-      </div>
-      <div>
-        <form>
-          name: 
-          <input
-            type='text'
-            value={name}
-            onChange={(event) => setName(event.target.value)} 
-          /> 
-          <br/> 
-          birthdate:
-          <input
-            type='date'
-            value={born}
-            onChange={(event) => setBorn(event.target.value)}
-          />
-          <br /> 
-          height:
-          <input
-            type='number'
-            value={height}
-            onChange={(event) => setHeight(event.target.value)}
-          />
-        </form>
-        <div>
-          {name} {born} {height} 
-        </div>
-      </div>
-    </>
+    </div>
   )
 }
-
 ReactDOM.render(<App />, document.getElementById('root'))
