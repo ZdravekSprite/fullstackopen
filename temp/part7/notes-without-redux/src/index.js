@@ -12,25 +12,49 @@ import {
 } from "react-router-dom"
 
 import {
-  Container,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
   Paper,
-  TextField,
-  Button,
-  Toolbar,
-  AppBar
 } from '@material-ui/core'
 
-import { Alert } from '@material-ui/lab'
+import styled from 'styled-components'
+
+const Button = styled.button`
+  background: Bisque;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid Chocolate;
+  border-radius: 3px;
+`
+
+const Input = styled.input`
+  margin: 0.25em;
+`
+
+const Page = styled.div`
+  padding: 1em;
+  background: papayawhip;
+`
+
+const Navigation = styled.div`
+  background: BurlyWood;
+  padding: 1em;
+`
+
+const Footer = styled.div`
+  background: Chocolate;
+  padding: 1em;
+  margin-top: 1em;
+`
 
 const Home = () => (
-  <div> 
-    <h2>TKTL notes app</h2> 
-    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p> 
+  <div>
+    <h2>TKTL notes app</h2>
+    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
   </div>
 )
 
@@ -44,7 +68,7 @@ const Note = ({ note }) => {
   )
 }
 
-const Notes = ({notes}) => (
+const Notes = ({ notes }) => (
   <div>
     <h2>Notes</h2>
 
@@ -93,16 +117,14 @@ const Login = (props) => {
       <h2>login</h2>
       <form onSubmit={onSubmit}>
         <div>
-          <TextField label="username" />
+          username:
+          <Input />
         </div>
         <div>
-          <TextField  label="password" type='password' />
+          password:
+          <Input type='password' />
         </div>
-        <div>
-          <Button variant="contained" color="primary" type="submit">
-            login
-          </Button>
-        </div>
+        <Button type="submit" primary=''>login</Button>
       </form>
     </div>
   )
@@ -130,16 +152,16 @@ const App = () => {
     }
   ])
 
-  const [user, setUser] = useState(null) 
+  const [user, setUser] = useState(null)
 
-  const [message, setMessage] = useState(null) 
+  const [message, setMessage] = useState(null)
 
   const login = (user) => {
     setUser(user)
     setMessage(`welcome ${user}`)
     setTimeout(() => {
       setMessage(null)
-    }, 10000*4)
+    }, 10000 * 4)
   }
 
   const padding = {
@@ -147,61 +169,45 @@ const App = () => {
   }
 
   const match = useRouteMatch('/notes/:id')
-  const note = match 
+  const note = match
     ? notes.find(note => note.id === Number(match.params.id))
     : null
 
-  return (
-    <Container>
-      <AppBar position="static">
-        <Toolbar>
-          <Button color="inherit" component={Link} to="/">
-            home
-          </Button>
-          <Button color="inherit" component={Link} to="/notes">
-            notes
-          </Button>
-          <Button color="inherit" component={Link} to="/users">
-            users
-          </Button>   
+    return (
+      <Page>
+        <Navigation>
+          <Link style={padding} to="/">home</Link>
+          <Link style={padding} to="/notes">notes</Link>
+          <Link style={padding} to="/users">users</Link>
           {user
             ? <em>{user} logged in</em>
-            : <Button color="inherit" component={Link} to="/login">
-                LINK
-              </Button>
-          }                              
-        </Toolbar>
-      </AppBar>
-
-      {(message &&
-        <Alert severity="success">
-          {message}
-        </Alert>
-      )}
-
-      <Switch>
-        <Route path="/notes/:id">
-          <Note note={note} />
-        </Route>
-        <Route path="/notes">
-          <Notes notes={notes} />
-        </Route>
-        <Route path="/users">
-          {user ? <Users /> : <Redirect to="/login" />}
-        </Route>
-        <Route path="/login">
-          <Login onLogin={login} />
-        </Route>
-        <Route path="/">
-          <Home />
-        </Route>
-      </Switch>
-      <div>
-        <br />
-        <em>Note app, Department of Computer Science 2020</em>
-      </div>
-    </Container>
-  )
+            : <Link style={padding} to="/login">login</Link>
+          }
+        </Navigation>
+  
+        <Switch>
+          <Route path="/notes/:id">
+            <Note note={note} />
+          </Route>
+          <Route path="/notes">
+            <Notes notes={notes} />
+          </Route>
+          <Route path="/users">
+            {user ? <Users /> : <Redirect to="/login" />}
+          </Route>
+          <Route path="/login">
+            <Login onLogin={login} />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+        
+        <Footer>
+          <em>Note app, Department of Computer Science 2020</em>
+        </Footer>
+      </Page>
+    )
 }
 
 ReactDOM.render(
