@@ -21,9 +21,13 @@ module.exports = {
     'react', 'jest', 'cypress'
   ],
   'rules': {
+    "no-unused-vars": [
+      "error",
+      { "vars": "all", "args": "none" }
+    ],
     'indent': [
       'error',
-      2
+      2, {"SwitchCase": 1}
     ],
     'linebreak-style': [
       'error',

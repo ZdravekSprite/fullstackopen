@@ -8,12 +8,14 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import storage from './utils/storage'
 
-const App = () => {
+import { useSelector, useDispatch } from 'react-redux'
+import { setNotification } from './reducers/notificationReducer'
+
+const App = (props) => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [notification, setNotification] = useState(null)
 
   const blogFormRef = React.createRef()
 
@@ -28,13 +30,11 @@ const App = () => {
     setUser(user)
   }, [])
 
+  const dispatch = useDispatch()
+  const notification = useSelector(state => state)
+
   const notifyWith = (message, type = 'success') => {
-    setNotification({
-      message, type
-    })
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
+    dispatch(setNotification(message, type, 5))
   }
 
   const handleLogin = async (event) => {

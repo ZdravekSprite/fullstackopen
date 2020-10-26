@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect } from 'react-redux'
 
 const Notification = ({ notification }) => {
   if (!notification) {
@@ -18,4 +19,6 @@ const Notification = ({ notification }) => {
   </div>
 }
 
-export default Notification
+export default connect(
+  (state) => ({ notification: state.notification })
+)(Notification)
