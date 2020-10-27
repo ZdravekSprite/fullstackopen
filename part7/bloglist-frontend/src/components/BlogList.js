@@ -14,8 +14,6 @@ const BlogList = (props) => {
         <Blog
           key={blog.id}
           blog={blog}
-          handleLike={props.handleLike}
-          handleRemove={props.handleRemove}
           own={props.user.username === blog.user.username}
         />
       )}

@@ -1,6 +1,6 @@
 {
   "name": "bloglist-frontend",
-  "version": "0.7.10",
+  "version": "0.7.11",
   "private": true,
   "dependencies": {
     "@testing-library/user-event": "^12.1.10",

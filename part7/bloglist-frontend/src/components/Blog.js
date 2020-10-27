@@ -1,7 +1,12 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
-const Blog = ({ blog, handleLike, handleRemove, own }) => {
+const Blog = ({ blog, own }) => {
+//  const blogs = useSelector(state => state.blogs )
+
   const [visible, setVisible] = useState(false)
 
   const blogStyle = {
@@ -14,6 +19,18 @@ const Blog = ({ blog, handleLike, handleRemove, own }) => {
 
   const label = visible ? 'hide' : 'view'
 
+  const dispatch = useDispatch()
+
+  const like = () => {
+    dispatch(likeBlog(blog))
+    dispatch(setNotification(`you liked  '${blog.title}' by ${blog.author}!`))
+  }
+
+  const remove = () => {
+    dispatch(removeBlog(blog.id))
+    dispatch(setNotification(`you removed  '${blog.title}' by ${blog.author}!`))
+  }
+
   return (
     <div style={blogStyle} className='blog'>
       <div>
@@ -23,10 +40,10 @@ const Blog = ({ blog, handleLike, handleRemove, own }) => {
         <div>
           <div>{blog.url}</div>
           <div>likes {blog.likes}
-            <button onClick={() => handleLike(blog.id)}>like</button>
+            <button onClick={like}>like</button>
           </div>
           <div>{blog.user.name}</div>
-          {own && <button onClick={() => handleRemove(blog.id)}>remove</button>}
+          {own && <button onClick={remove}>remove</button>}
         </div>
       )}
     </div>
@@ -39,8 +56,6 @@ Blog.propTypes = {
     author: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
   }).isRequired,
-  handleLike: PropTypes.func.isRequired,
-  handleRemove: PropTypes.func.isRequired,
   own: PropTypes.bool.isRequired
 }
 
