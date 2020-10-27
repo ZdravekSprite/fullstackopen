@@ -8,16 +8,22 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import storage from './utils/storage'
 
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 
-const App = (props) => {
+const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const blogFormRef = React.createRef()
+
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -29,9 +35,6 @@ const App = (props) => {
     const user = storage.loadUser()
     setUser(user)
   }, [])
-
-  const dispatch = useDispatch()
-  const notification = useSelector(state => state)
 
   const notifyWith = (message, type = 'success') => {
     dispatch(setNotification(message, type, 5))
@@ -51,17 +54,6 @@ const App = (props) => {
       storage.saveUser(user)
     } catch (exception) {
       notifyWith('wrong username/password', 'error')
-    }
-  }
-
-  const createBlog = async (blog) => {
-    try {
-      const newBlog = await blogService.create(blog)
-      blogFormRef.current.toggleVisibility()
-      setBlogs(blogs.concat(newBlog))
-      notifyWith(`a new blog '${newBlog.title}' by ${newBlog.author} added!`)
-    } catch (exception) {
-      console.log(exception)
     }
   }
 
@@ -91,7 +83,7 @@ const App = (props) => {
       <div>
         <h2>login to application</h2>
 
-        <Notification notification={notification} />
+        <Notification />
 
         <form onSubmit={handleLogin}>
           <div>
@@ -120,18 +112,17 @@ const App = (props) => {
     <div>
       <h2>blogs</h2>
 
-      <Notification notification={notification} />
+      <Notification />
 
       <p>
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
 
       <Togglable buttonLabel='create new blog' ref={blogFormRef}>
-        <NewBlog createBlog={createBlog} />
+        <NewBlog />
       </Togglable>
 
       <BlogList
-        blogs={blogs}
         handleLike={handleLike}
         handleRemove={handleRemove}
         user={user}
