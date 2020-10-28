@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
-const Blog = ({ blog, own }) => {
-//  const blogs = useSelector(state => state.blogs )
+const Blog = ({ blog }) => {
+  const user = useSelector(state => state.user )
 
   const [visible, setVisible] = useState(false)
 
@@ -43,7 +43,7 @@ const Blog = ({ blog, own }) => {
             <button onClick={like}>like</button>
           </div>
           <div>{blog.user.name}</div>
-          {own && <button onClick={remove}>remove</button>}
+          {user.username === blog.user.username && <button onClick={remove}>remove</button>}
         </div>
       )}
     </div>
@@ -55,8 +55,7 @@ Blog.propTypes = {
     title: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
-  }).isRequired,
-  own: PropTypes.bool.isRequired
+  }).isRequired
 }
 
 export default Blog

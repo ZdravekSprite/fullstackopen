@@ -4,6 +4,7 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
 
+import { login } from './reducers/userReducer'
 import loginService from './services/login'
 import storage from './utils/storage'
 
@@ -26,11 +27,8 @@ const App = () => {
   useEffect(() => {
     const user = storage.loadUser()
     setUser(user)
+    dispatch(login(user))
   }, [])
-
-  const notifyWith = (message, type = 'success') => {
-    dispatch(setNotification(message, type, 5))
-  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -38,19 +36,20 @@ const App = () => {
       const user = await loginService.login({
         username, password
       })
-
       setUsername('')
       setPassword('')
       setUser(user)
-      notifyWith(`${user.name} welcome back!`)
+      dispatch(login(user))
+      dispatch(setNotification(`${user.name} welcome back!`))
       storage.saveUser(user)
     } catch (exception) {
-      notifyWith('wrong username/password', 'error')
+      dispatch(setNotification('wrong username/password', 'error'))
     }
   }
 
   const handleLogout = () => {
     setUser(null)
+    dispatch(login(null))
     storage.logoutUser()
   }
 
@@ -98,9 +97,7 @@ const App = () => {
         <NewBlog />
       </Togglable>
 
-      <BlogList
-        user={user}
-      />
+      <BlogList />
     </div>
   )
 }

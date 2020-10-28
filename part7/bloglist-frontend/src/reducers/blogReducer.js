@@ -3,9 +3,6 @@ import blogServices from '../services/blogs'
 const byLikes = (a1, a2) => a2.likes - a1.likes
 
 const reducer = (state = [], action) => {
-  console.log('state now: ', state)
-  console.log('action ', action)
-
   switch (action.type) {
     case 'INIT':
       return action.data.sort(byLikes)

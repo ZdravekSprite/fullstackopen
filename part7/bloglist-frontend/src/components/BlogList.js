@@ -14,7 +14,6 @@ const BlogList = (props) => {
         <Blog
           key={blog.id}
           blog={blog}
-          own={props.user.username === blog.user.username}
         />
       )}
     </div>
