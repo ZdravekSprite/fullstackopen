@@ -1,6 +1,6 @@
 {
   "name": "bloglist-backend",
-  "version": "0.7.0",
+  "version": "0.7.17",
   "description": "blog list app backend",
   "main": "index.js",
   "scripts": {
