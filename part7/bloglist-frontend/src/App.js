@@ -7,6 +7,7 @@ import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
 import LoginForm from './components/LoginForm'
 import User from './components/User'
+import Blog from './components/Blog'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
@@ -19,6 +20,7 @@ import {
 const App = () => {
   const user = useSelector(state => state.user)
   const users = useSelector(state => state.users)
+  const blogs = useSelector(state => state.blogs)
 
   const blogFormRef = React.createRef()
 
@@ -31,6 +33,11 @@ const App = () => {
   const matchUsers = useRouteMatch('/users/:id')
   const theUser = matchUsers
     ? users.find(u => u.id === matchUsers.params.id)
+    : null
+
+  const matchBlogs = useRouteMatch('/blogs/:id')
+  const theBlog = matchBlogs
+    ? blogs.find(b => b.id === matchBlogs.params.id)
     : null
 
   if (!user) {
@@ -54,6 +61,9 @@ const App = () => {
         </Route>
         <Route path="/users">
           <UserList />
+        </Route>
+        <Route path="/blogs/:id">
+          <Blog blog={theBlog} />
         </Route>
         <Route path="/">
           <Togglable buttonLabel='create new blog' ref={blogFormRef}>
