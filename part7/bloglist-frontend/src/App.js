@@ -6,17 +6,20 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
 import LoginForm from './components/LoginForm'
+import User from './components/User'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { allUsers } from './reducers/userReducer'
 import {
-  BrowserRouter as Router,
-  Switch, Route
+  Switch, Route,
+  useRouteMatch
 } from 'react-router-dom'
 
 const App = () => {
   const user = useSelector(state => state.user)
+  const users = useSelector(state => state.users)
+
   const blogFormRef = React.createRef()
 
   const dispatch = useDispatch()
@@ -24,6 +27,11 @@ const App = () => {
     dispatch(initializeBlogs())
     dispatch(allUsers())
   }, [dispatch])
+
+  const matchUsers = useRouteMatch('/users/:id')
+  const theUser = matchUsers
+    ? users.find(u => u.id === matchUsers.params.id)
+    : null
 
   if (!user) {
     return (
@@ -40,19 +48,20 @@ const App = () => {
       <h2>blogs</h2>
       <Notification />
       <LoginForm />
-      <Router>
-        <Switch>
-          <Route path="/users">
-            <UserList />
-          </Route>
-          <Route path="/">
-            <Togglable buttonLabel='create new blog' ref={blogFormRef}>
-              <NewBlog />
-            </Togglable>
-            <BlogList />
-          </Route>
-        </Switch>
-      </Router>
+      <Switch>
+        <Route path="/users/:id">
+          <User user={theUser} />
+        </Route>
+        <Route path="/users">
+          <UserList />
+        </Route>
+        <Route path="/">
+          <Togglable buttonLabel='create new blog' ref={blogFormRef}>
+            <NewBlog />
+          </Togglable>
+          <BlogList />
+        </Route>
+      </Switch>
     </div>
   )
 }
