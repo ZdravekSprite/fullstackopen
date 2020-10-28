@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 import { allUsers } from './reducers/userReducer'
 import {
-  Switch, Route,
+  Switch, Route, Link,
   useRouteMatch
 } from 'react-router-dom'
 
@@ -40,6 +40,15 @@ const App = () => {
     ? blogs.find(b => b.id === matchBlogs.params.id)
     : null
 
+  const padding = {
+    padding: 5
+  }
+
+  const navStyle = {
+    padding: 5,
+    background: 'lightgray'
+  }
+
   if (!user) {
     return (
       <div>
@@ -52,9 +61,13 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
+      <div style={navStyle}>
+        <Link style={padding} to="/">blogs</Link>
+        <Link style={padding} to="/users">users</Link>
+        <LoginForm style={padding} />
+      </div>
+      <h2>blog app</h2>
       <Notification />
-      <LoginForm />
       <Switch>
         <Route path="/users/:id">
           <User user={theUser} />
