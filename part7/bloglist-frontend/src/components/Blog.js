@@ -1,11 +1,22 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { commentBlog, likeBlog, removeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
 const Blog = ({ blog }) => {
   if (!blog) {
     return null
+  }
+
+  const [newComment, setNewComment] = useState(
+    'add comment...'
+  )
+  const addComment = (event) => {
+    event.preventDefault()
+    dispatch(commentBlog(blog.id, newComment))
+  }
+  const handleCommentChange = (event) => {
+    setNewComment(event.target.value)
   }
 
   const user = useSelector(state => state.user)
@@ -31,6 +42,13 @@ const Blog = ({ blog }) => {
       <div>added by {blog.user.name}</div>
       {user.username === blog.user.username && <button onClick={remove}>remove</button>}
       <h4>comments</h4>
+      <form onSubmit={addComment}>
+        <input
+          value={newComment}
+          onChange={handleCommentChange}
+        />
+        <button type="submit">add comment</button>
+      </form>
       <ul>
         {blog.comments.map((c, i) =>
           <li key={i}>{c}</li>

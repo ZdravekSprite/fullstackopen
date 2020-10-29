@@ -3,11 +3,18 @@ import blogServices from '../services/blogs'
 const byLikes = (a1, a2) => a2.likes - a1.likes
 
 const reducer = (state = [], action) => {
+  //console.log('state now: ', state)
+  //console.log('action ', action)
+
   switch (action.type) {
     case 'INIT':
       return action.data.sort(byLikes)
     case 'CREATE':
       return [...state, action.data]
+    case 'COMMENT': {
+      const changed = action.data
+      return state.map(b => b.id === changed.id ? changed : b).sort(byLikes)
+    }
     case 'LIKE': {
       const liked = action.data
       return state.map(b => b.id === liked.id ? liked : b).sort(byLikes)
@@ -38,6 +45,16 @@ export const likeBlog = (blog) => {
     dispatch({
       type: 'LIKE',
       data: { ...data, user: u }
+    })
+  }
+}
+
+export const commentBlog = (id, comment) => {
+  return async dispatch => {
+    const data = await blogServices.comment(id, comment)
+    dispatch({
+      type: 'COMMENT',
+      data
     })
   }
 }
