@@ -17,6 +17,14 @@ import {
   useRouteMatch
 } from 'react-router-dom'
 
+import styled from 'styled-components'
+import { Navbar, Nav } from 'react-bootstrap'
+
+const Page = styled.div`
+  padding: 1em;
+  background: papayawhip;
+`
+
 const App = () => {
   const user = useSelector(state => state.user)
   const users = useSelector(state => state.users)
@@ -44,28 +52,34 @@ const App = () => {
     padding: 5
   }
 
-  const navStyle = {
-    padding: 5,
-    background: 'lightgray'
-  }
-
   if (!user) {
     return (
-      <div>
+      <Page className="container">
         <h2>login to application</h2>
         <Notification />
         <LoginForm />
-      </div>
+      </Page>
     )
   }
 
   return (
-    <div>
-      <div style={navStyle}>
-        <Link style={padding} to="/">blogs</Link>
-        <Link style={padding} to="/users">users</Link>
-        <LoginForm style={padding} />
-      </div>
+    <Page className="container">
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="#" as="span">
+              <Link style={padding} to="/">blogs</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              <Link style={padding} to="/users">users</Link>
+            </Nav.Link>
+            <Nav.Link href="#" as="span">
+              <LoginForm style={padding} />
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
       <h2>blog app</h2>
       <Notification />
       <Switch>
@@ -85,7 +99,7 @@ const App = () => {
           <BlogList />
         </Route>
       </Switch>
-    </div>
+    </Page>
   )
 }
 

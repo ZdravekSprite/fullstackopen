@@ -49,12 +49,13 @@ export const likeBlog = (blog) => {
   }
 }
 
-export const commentBlog = (id, comment) => {
+export const commentBlog = (blog, comment) => {
   return async dispatch => {
-    const data = await blogServices.comment(id, comment)
+    const u = blog.user
+    const data = await blogServices.comment(blog.id, comment)
     dispatch({
       type: 'COMMENT',
-      data
+      data: { ...data, user: u }
     })
   }
 }

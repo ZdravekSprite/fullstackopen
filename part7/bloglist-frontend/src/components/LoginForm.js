@@ -5,6 +5,8 @@ import { login } from '../reducers/loginReducer'
 import loginService from '../services/login'
 import storage from '../utils/storage'
 
+import { Form, Button } from 'react-bootstrap'
+
 const LoginForm = () => {
   const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
@@ -44,25 +46,30 @@ const LoginForm = () => {
   if (!user) {
     return (
       <div>
-        <form onSubmit={handleLogin}>
-          <div>
-            username
-            <input
+        <Form onSubmit={handleLogin}>
+          <Form.Group>
+            <Form.Label>username:</Form.Label>
+            <Form.Control
+              type="text"
+              name="username"
               id='username'
               value={username}
               onChange={({ target }) => setUsername(target.value)}
             />
-          </div>
-          <div>
-            password
-            <input
+            <Form.Label>password:</Form.Label>
+            <Form.Control
+              type="password"
               id='password'
               value={password}
               onChange={({ target }) => setPassword(target.value)}
             />
-          </div>
-          <button id='login'>login</button>
-        </form>
+            <Button
+              variant="primary"
+              type="submit"
+              id='login'
+            >login</Button>
+          </Form.Group>
+        </Form>
       </div>
     )
   }

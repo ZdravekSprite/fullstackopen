@@ -13,7 +13,7 @@ const Blog = ({ blog }) => {
   )
   const addComment = (event) => {
     event.preventDefault()
-    dispatch(commentBlog(blog.id, newComment))
+    dispatch(commentBlog(blog, newComment))
   }
   const handleCommentChange = (event) => {
     setNewComment(event.target.value)

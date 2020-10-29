@@ -3,5 +3,4 @@
 .env.local
 /cypress/videos/
 /cypress/screenshots/
-/public
 package-lock.json
