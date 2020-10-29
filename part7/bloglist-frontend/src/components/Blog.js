@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { commentBlog, likeBlog, removeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
+import { Form, Button } from 'react-bootstrap'
+
 const Blog = ({ blog }) => {
   if (!blog) {
     return null
@@ -37,19 +39,23 @@ const Blog = ({ blog }) => {
       <h1>{blog.title} {blog.author}</h1>
       <div><a href={blog.url} target="_blank" rel="noreferrer" >{blog.url}</a></div>
       <div> {blog.likes} likes
-        <button onClick={like}>like</button>
+        <Button onClick={like}>like</Button>
       </div>
       <div>added by {blog.user.name}</div>
-      {user.username === blog.user.username && <button onClick={remove}>remove</button>}
+      {user.username === blog.user.username && <Button onClick={remove}>remove</Button>}
       <h4>comments</h4>
-      <form onSubmit={addComment}>
-        <input
-          value={newComment}
-          onChange={handleCommentChange}
-        />
-        <button type="submit">add comment</button>
-      </form>
-      <ul>
+      <Form onSubmit={addComment}>
+        <Form.Group>
+          <Form.Control
+            type="text"
+            name="newComment"
+            value={newComment}
+            onChange={handleCommentChange}
+          />
+          <Button type="submit">add comment</Button>
+        </Form.Group>
+      </Form>
+      <ul className="striped">
         {blog.comments.map((c, i) =>
           <li key={i}>{c}</li>
         )}

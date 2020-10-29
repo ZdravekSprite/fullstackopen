@@ -1,6 +1,6 @@
 {
   "name": "bloglist-frontend",
-  "version": "0.7.19",
+  "version": "0.7.20",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.0",
