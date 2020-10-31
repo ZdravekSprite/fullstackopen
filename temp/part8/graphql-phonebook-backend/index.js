@@ -27,9 +27,13 @@ const typeDefs = gql`
   type Person {
     name: String!
     phone: String
+    address: Address!
+    id: ID!
+  }
+
+  type Address {
     street: String!
     city: String! 
-    id: ID!
   }
 
   type Query {
@@ -45,6 +49,14 @@ const resolvers = {
     allPersons: () => persons,
     findPerson: (root, args) =>
       persons.find(p => p.name === args.name)
+  },
+  Person: {
+    address: (root) => {
+      return { 
+        street: root.street,
+        city: root.city
+      }
+    }
   }
 }
 
