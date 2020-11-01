@@ -19,7 +19,6 @@ const Notify = ({ errorMessage }) => {
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
-
   const result = useQuery(ALL_PERSONS)
 
   if (result.loading) {
@@ -30,7 +29,7 @@ const App = () => {
     setErrorMessage(message)
     setTimeout(() => {
       setErrorMessage(null)
-    }, 10000)
+    }, 5000)
   }
 
   return (
