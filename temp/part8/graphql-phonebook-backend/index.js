@@ -26,19 +26,6 @@ let persons = [
 ]
 
 const typeDefs = gql`
-  type Mutation {
-    addPerson(
-      name: String!
-      phone: String
-      street: String!
-      city: String!
-    ): Person
-    editNumber(
-      name: String!
-      phone: String!
-    ): Person
-  }
-
   type Person {
     name: String!
     phone: String
@@ -51,11 +38,29 @@ const typeDefs = gql`
     city: String! 
   }
 
+  enum YesNo {
+    YES
+    NO
+  }
+
   type Query {
     personCount: Int!
-    allPersons: [Person!]!
+    allPersons(phone: YesNo): [Person!]!
     findPerson(name: String!): Person
   }
+
+  type Mutation {
+    addPerson(
+      name: String!
+      phone: String
+      street: String!
+      city: String!
+    ): Person
+    editNumber(
+      name: String!
+      phone: String!
+    ): Person    
+  }  
 `
 
 const resolvers = {
@@ -65,8 +70,10 @@ const resolvers = {
       if (!args.phone) {
         return persons
       }
+
       const byPhone = (person) =>
         args.phone === 'YES' ? person.phone : !person.phone
+
       return persons.filter(byPhone)
     },
     findPerson: (root, args) =>
@@ -87,7 +94,6 @@ const resolvers = {
           invalidArgs: args.name,
         })
       }
-
       const person = { ...args, id: uuid() }
       persons = persons.concat(person)
       return person
