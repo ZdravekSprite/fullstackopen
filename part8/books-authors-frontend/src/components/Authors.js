@@ -10,7 +10,7 @@ const Authors = (props) => {
   if (result.loading) {
     return <div>loading...</div>
   }
-  
+
   const authors = result.data.allAuthors
 
   if (!props.show) {
@@ -40,7 +40,7 @@ const Authors = (props) => {
           )}
         </tbody>
       </table>
-      <BirthyearForm />
+      <BirthyearForm authors={authors} />
     </div>
   )
 }

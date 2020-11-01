@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client'
 import { ALL_AUTHORS, EDIT_YEAR } from '../queries'
 
-const BirthyearForm = () => {
+const BirthyearForm = ({ authors }) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
 
-  const [updateAuthor] = useMutation(EDIT_YEAR, {
+  const [updateAuthor, result] = useMutation(EDIT_YEAR, {
     refetchQueries: [
       { query: ALL_AUTHORS }
     ],
@@ -14,6 +14,12 @@ const BirthyearForm = () => {
       console.log(error)
     }
   })
+
+  useEffect(() => {
+    if (result.data && !result.data.editAuthor) {
+      console.log('name not found')
+    }
+  }, [result.data]) // eslint-disable-line
 
   const submit = async (event) => {
     event.preventDefault()
@@ -30,13 +36,17 @@ const BirthyearForm = () => {
 
       <form onSubmit={submit}>
         <div>
-          name <input
+          name: <select
             value={name}
             onChange={({ target }) => setName(target.value)}
-          />
+          >
+            {authors.map(a =>
+              <option key={a.name} value={a.name} >{a.name}</option>
+            )}
+          </select>
         </div>
         <div>
-          born <input
+          born: <input
             value={born}
             onChange={({ target }) => setBorn(target.value * 1)}
           />
