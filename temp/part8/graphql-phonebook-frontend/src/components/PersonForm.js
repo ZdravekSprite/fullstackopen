@@ -9,7 +9,6 @@ const PersonForm = ({ setError }) => {
   const [street, setStreet] = useState('')
   const [city, setCity] = useState('')
 
-
   const [createPerson] = useMutation(CREATE_PERSON, {
     refetchQueries: [{ query: ALL_PERSONS }],
     onError: (error) => {
@@ -24,7 +23,7 @@ const PersonForm = ({ setError }) => {
       variables: { name, phone, street, city }
     })
 
-    setName('Arto Hellas')
+    setName('')
     setPhone('')
     setStreet('')
     setCity('')
