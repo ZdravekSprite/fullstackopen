@@ -1,5 +1,5 @@
 const { ApolloServer, UserInputError, gql } = require('apollo-server')
-const {JWT_SECRET, MONGODB_URI} = require('./utils/config')
+const { JWT_SECRET, MONGODB_URI } = require('./utils/config')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const Person = require('./models/person')
