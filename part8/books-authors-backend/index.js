@@ -149,24 +149,40 @@ const resolvers = {
     allAuthors: () => Author.find({}),
   },
   Book: {
-    author: (root) => Author.findOne({ '_id' : root.author })
+    author: (root) => Author.findOne({ '_id': root.author })
   },
   Author: {
     bookCount: (root) => Book.countDocuments({ author: root._id })
   },
   Mutation: {
     addBook: async (root, args) => {
-      let author = await Author.findOne({ 'name' : args.author })
+      let author = await Author.findOne({ 'name': args.author })
       if (!author) {
         author = new Author({ name: args.author })
-        await author.save()
+
+        try {
+          await author.save()
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          })
+        }
+
       }
       const book = new Book({ ...args, author: author })
-      await book.save()
+
+      try {
+        await book.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
+      }
+
       return book
     },
     editAuthor: async (root, args) => {
-      const author = await Author.findOne({ 'name' : args.name })
+      const author = await Author.findOne({ 'name': args.name })
       if (!author) {
         return null
       }
