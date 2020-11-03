@@ -7,9 +7,7 @@ const schema = new mongoose.Schema({
     unique: true,
     minlength: 4
   },
-  born: {
-    type: Number,
-  },
+  born: Number,
 })
 
 module.exports = mongoose.model('Author', schema)

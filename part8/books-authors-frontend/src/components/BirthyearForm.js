@@ -16,6 +16,9 @@ const BirthyearForm = ({ authors }) => {
   })
 
   useEffect(() => {
+    if ( authors.length > 0 ) {
+      setName(authors[0].name)
+    }
     if (result.data && !result.data.editAuthor) {
       console.log('name not found')
     }
@@ -23,10 +26,12 @@ const BirthyearForm = ({ authors }) => {
 
   const submit = async (event) => {
     event.preventDefault()
+    console.log('name: ', name)
+    console.log('born: ', born)
 
     updateAuthor({ variables: { name, born } })
 
-    setName('')
+    //setName('')
     setBorn('')
   }
 
