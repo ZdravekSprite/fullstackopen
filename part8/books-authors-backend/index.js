@@ -1,5 +1,18 @@
 const { ApolloServer, UserInputError, gql } = require('apollo-server')
+const { MONGODB_URI } = require('./utils/config')
+const mongoose = require('mongoose')
+const Book = require('./models/book')
+const Author = require('./models/author')
 
+console.log('connecting to', MONGODB_URI)
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connection to MongoDB:', error.message)
+  })
+/*
 const { v1: uuid } = require('uuid')
 
 let authors = [
@@ -27,12 +40,12 @@ let authors = [
     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
   },
 ]
-
+*/
 /*
  * It might make more sense to associate a book with its author by storing the author’s id instead of the author’s name in the book.
  * However, for simplicity, we will store the author's name in the book
 */
-
+/*
 let books = [
   {
     title: 'Clean Code',
@@ -84,12 +97,12 @@ let books = [
     genres: ['classic', 'revolution']
   },
 ]
-
+*/
 const typeDefs = gql`
   type Mutation {
     addBook(
       title: String!
-      author: String!
+      author: String
       published: Int!
       genres: [String!]
     ): Book
@@ -107,7 +120,7 @@ const typeDefs = gql`
 
   type Book {
     title: String!
-    author: String!
+    author: String
     published: Int!
     genres: [String!]
   }
@@ -125,17 +138,18 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (root, args) => {
-      if (!args.author && !args.genre) {
-        return books
-      }
+    bookCount: () => Book.collection.countDocuments(),
+    authorCount: () => Author.collection.countDocuments(),
+    allBooks: () => {
+    //allBooks: (root, args) => {
+        //if (!args.author && !args.genre) {
+        return Book.find({})
+      /*}
       const byAuthor = args.author ? b => b.author === args.author : b => b
       const byGenre = args.genre ? b => b.genres.includes(args.genre) : b => b
-      return books.filter(byAuthor).filter(byGenre)
+      return books.filter(byAuthor).filter(byGenre)*/
     },
-    allAuthors: () => authors,
+    allAuthors: () => Author.find({}),
   },
   Author: {
     bookCount: (root, args) => {
@@ -144,7 +158,7 @@ const resolvers = {
   },
   Mutation: {
     addBook: (root, args) => {
-      if (books.find(b => b.title === args.title)) {
+      /*if (books.find(b => b.title === args.title)) {
         throw new UserInputError('Title must be unique', {
           invalidArgs: args.title,
         })
@@ -155,9 +169,11 @@ const resolvers = {
         authors = authors.concat(author)
       }
 
-      const book = { ...args, id: uuid() }
+      const book = { ...args }
       books = books.concat(book)
-      return book
+      return book*/
+      const book = new Book({ ...args })
+      return book.save()
     },
     editAuthor: (root, args) => {
       const author = authors.find(a => a.name === args.name)
