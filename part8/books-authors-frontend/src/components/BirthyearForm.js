@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client'
 import { ALL_AUTHORS, EDIT_YEAR } from '../queries'
 
-const BirthyearForm = ({ authors }) => {
+const BirthyearForm = ({ authors, token }) => {
   const [name, setName] = useState('')
   const [born, setBorn] = useState('')
 
@@ -24,6 +24,8 @@ const BirthyearForm = ({ authors }) => {
     }
   }, [result.data]) // eslint-disable-line
 
+  if(!token) return null
+  
   const submit = async (event) => {
     event.preventDefault()
     console.log('name: ', name)
