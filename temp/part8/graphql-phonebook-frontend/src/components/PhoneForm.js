@@ -1,32 +1,45 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { EDIT_NUMBER } from '../queries'
 
-const PhoneForm = ({ setError }) => {
+import { ALL_PERSONS, CREATE_PERSON } from '../queries'
+
+const PersonForm = ({ setError }) => {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
+  const [street, setStreet] = useState('')
+  const [city, setCity] = useState('')
 
-  const [changeNumber, result] = useMutation(EDIT_NUMBER)
-
-  useEffect(() => {
-    if (result.data && !result.data.editNumber) {
-      setError('name not found')
+  const [createPerson] = useMutation(CREATE_PERSON, {
+    refetchQueries: [{ query: ALL_PERSONS }],
+    onError: (error) => {
+      setError(error.graphQLErrors[0].message)
     }
-  }, [result.data]) // eslint-disable-line
+  })
 
   const submit = async (event) => {
     event.preventDefault()
 
-    changeNumber({ variables: { name, phone } })
+    console.log('.->', {
+      name, street, city,
+      phone: phone.length > 0 ? phone : null
+    })
+
+    createPerson({
+      variables: {
+        name, street, city,
+        phone: phone.length > 0 ? phone : null
+      }
+    })
 
     setName('')
     setPhone('')
+    setStreet('')
+    setCity('')
   }
 
   return (
     <div>
-      <h2>change number</h2>
-
+      <h2>create new</h2>
       <form onSubmit={submit}>
         <div>
           name <input
@@ -40,10 +53,22 @@ const PhoneForm = ({ setError }) => {
             onChange={({ target }) => setPhone(target.value)}
           />
         </div>
-        <button type='submit'>change number</button>
+        <div>
+          street <input
+            value={street}
+            onChange={({ target }) => setStreet(target.value)}
+          />
+        </div>
+        <div>
+          city <input
+            value={city}
+            onChange={({ target }) => setCity(target.value)}
+          />
+        </div>
+        <button type='submit'>add!</button>
       </form>
     </div>
   )
 }
 
-export default PhoneForm
+export default PersonForm
