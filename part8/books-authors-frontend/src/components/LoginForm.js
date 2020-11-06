@@ -19,8 +19,9 @@ const LoginForm = (props) => {
       const token = result.data.login.value
       props.setToken(token)
       localStorage.setItem('books-user-token', token)
+      props.client.resetStore()
       props.setPage('books')
-    }
+      }
   }, [result.data]) // eslint-disable-line
 
   if (!props.show) {
@@ -33,7 +34,6 @@ const LoginForm = (props) => {
     login({
       variables: { username, password }
     })
-
   }
 
   return (

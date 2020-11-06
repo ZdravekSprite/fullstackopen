@@ -19,6 +19,19 @@ export const ALL_BOOKS = gql`
     }
     published
     genres
+  },
+  me {
+    username
+    favoriteGenre
+  }
+}
+`
+
+export const ME = gql`
+{
+  me {
+    username
+    favoriteGenre
   }
 }
 `
