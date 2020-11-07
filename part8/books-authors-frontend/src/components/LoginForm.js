@@ -15,7 +15,7 @@ const LoginForm = (props) => {
 
   useEffect(() => {
     if (result.data) {
-      console.log('-->', result.data)
+      //console.log('-->', result.data)
       const token = result.data.login.value
       props.setToken(token)
       localStorage.setItem('books-user-token', token)

@@ -19,10 +19,20 @@ export const ALL_BOOKS = gql`
     }
     published
     genres
-  },
-  me {
-    username
-    favoriteGenre
+  }
+}
+`
+
+export const FIND_BOOKS = gql`
+query findBooksByGenre($genreToSearch: String!){
+  allBooks(
+    genre: $genreToSearch
+  ) {
+    title 
+    author {
+      name
+    }
+    published
   }
 }
 `
