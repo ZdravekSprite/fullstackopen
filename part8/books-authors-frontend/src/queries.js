@@ -1,26 +1,40 @@
 import { gql  } from '@apollo/client'
 
+const BOOK_DETAILS = gql`
+fragment BookDetails on Book {
+  title 
+  author {
+    name
+  }
+  published
+  genres
+}
+`
+
+const AUTHOR_DETAILS = gql`
+fragment AuthorDetails on Author {
+  name
+    born
+    bookCount
+}
+`
+
 export const ALL_AUTHORS = gql`
 {
   allAuthors {
-    name
-    born
-    bookCount
+    ...AuthorDetails
   }
 }
+${AUTHOR_DETAILS}
 `
 
 export const ALL_BOOKS = gql`
 {
   allBooks {
-    title 
-    author {
-      name
-    }
-    published
-    genres
+    ...BookDetails
   }
 }
+${BOOK_DETAILS}
 `
 
 export const FIND_BOOKS = gql`
@@ -28,13 +42,10 @@ query findBooksByGenre($genreToSearch: String!){
   allBooks(
     genre: $genreToSearch
   ) {
-    title 
-    author {
-      name
-    }
-    published
+    ...BookDetails
   }
 }
+${BOOK_DETAILS}
 `
 
 export const ME = gql`
@@ -54,29 +65,37 @@ mutation createBook($title: String!, $author: String!, $published: Int!, $genres
     published: $published,
     genres: $genres
   ) {
-    title
-    author {
-      name
-    }
-    published
+    ...BookDetails
+  }
+}
+${BOOK_DETAILS}
+`
+
+export const EDIT_YEAR = gql`
+mutation editYear($name: String!, $born: Int!) {
+  editAuthor(
+    name: $name,
+    setBornTo: $born
+  ) {
+    ...AuthorDetails
+  }
+}
+${AUTHOR_DETAILS}
+`
+
+export const LOGIN = gql`
+mutation login($username: String!, $password: String!) {
+  login(username: $username, password: $password)  {
+    value
   }
 }
 `
 
-export const EDIT_YEAR = gql`
-  mutation editYear($name: String!, $born: Int!) {
-    editAuthor(name: $name, setBornTo: $born)  {
-      name
-      born
-      bookCount
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      ...BookDetails
     }
   }
-`
-
-export const LOGIN = gql`
-  mutation login($username: String!, $password: String!) {
-    login(username: $username, password: $password)  {
-      value
-    }
-  }
+  ${BOOK_DETAILS}
 `
