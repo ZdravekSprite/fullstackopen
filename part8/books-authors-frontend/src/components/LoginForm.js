@@ -6,7 +6,7 @@ import { LOGIN } from '../queries'
 const LoginForm = (props) => {
   const [login, result] = useMutation(LOGIN, {
     onError: (error) => {
-      props.setError(error.graphQLErrors[0].message)
+      props.notify(error.graphQLErrors[0].message)
     }
   })
 

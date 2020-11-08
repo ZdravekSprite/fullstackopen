@@ -6,7 +6,7 @@ import RecommendendBooks from './components/RecommendendBooks'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 
-import { BOOK_ADDED } from './queries'
+import { BOOK_ADDED, ALL_BOOKS, ALL_AUTHORS } from './queries'
 
 const Notify = ({ errorMessage }) => {
   if (!errorMessage) {
@@ -26,10 +26,43 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const client = useApolloClient()
 
+  const updateCacheWith = (addedBook) => {
+    const includedIn = (set, object) =>
+      set.map(b => b.id).includes(object.id)
+
+    const {allBooks} = client.readQuery({ query: ALL_BOOKS })
+    if (!includedIn(allBooks, addedBook)) {
+      client.writeQuery({
+        query: ALL_BOOKS,
+        data: { allBooks: allBooks.concat(addedBook) }
+      })
+    }
+    const {allAuthors} = client.readQuery({ query: ALL_AUTHORS })
+    if (!includedIn(allAuthors, addedBook.author)) {
+      client.writeQuery({
+        query: ALL_AUTHORS,
+        data: { allAuthors: allAuthors.concat(addedBook.author) }
+      })
+    }
+/*
+    if (token) {
+      const {favoriteGenre} = client.readQuery({ query: ME }).me
+      const rootDataInStore = client.cache.data.data.ROOT_QUERY
+      //const favoriteGenre = rootDataInStore.me.favoriteGenre
+      const favoriteBooks = rootDataInStore[`allBooks({"genre":"${favoriteGenre}"})`]
+      console.log(favoriteGenre)
+      if (addedBook.genres.includes(favoriteGenre)) {
+        rootDataInStore[`allBooks({"genre":"${favoriteGenre}"})`] = [...favoriteBooks, addedBook]
+      }
+    }*/
+    client.resetStore()
+  }
+
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
       const addedBook = subscriptionData.data.bookAdded
       notify(`${addedBook.title} added`)
+      updateCacheWith(addedBook)
     }
   })
 
@@ -71,6 +104,7 @@ const App = () => {
       <NewBook show={page === 'add'} />
       <LoginForm
         show={page === 'login'}
+        notify={notify}
         setToken={setToken}
         setPage={setPage}
         client={client}
