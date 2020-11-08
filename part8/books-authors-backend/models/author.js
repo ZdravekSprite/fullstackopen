@@ -8,6 +8,12 @@ const schema = new mongoose.Schema({
     minlength: 4
   },
   born: Number,
+  friendOf: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Book'
+    }
+  ],
 })
 
 module.exports = mongoose.model('Author', schema)
