@@ -1,0 +1,21 @@
+{
+  "name": "books-authors-backend",
+  "version": "0.8.7",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^2.19.0",
+    "dotenv": "^8.2.0",
+    "graphql": "^15.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.11"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
