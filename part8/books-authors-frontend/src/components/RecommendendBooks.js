@@ -4,25 +4,23 @@ import { useQuery, useLazyQuery } from '@apollo/client'
 import { ME, FIND_BOOKS } from '../queries'
 
 const RecommendendBooks = (props) => {
-  const [genre, setGenre] = useState(null)
+  const user = useQuery(ME)
+  const [getBooks, result] = useLazyQuery(FIND_BOOKS)
   const [books, setBooks] = useState([])
-  const result = useQuery(ME)
-  const [getBooks, resultMy] = useLazyQuery(FIND_BOOKS)
 
   useEffect(() => {
-    if (result.data && result.data.me) {
-      //console.log('g->', result.data)
-      setGenre(result.data.me.favoriteGenre)
-      getBooks({ variables: { genreToSearch: genre } })
+    if (user.data && user.data.me) {
+      //console.log('u->', user.data)
+      getBooks({ variables: { genreToSearch: user.data.me.favoriteGenre } })
     }
-  }, [result.data, genre, getBooks])
+  }, [user.data, getBooks])
 
   useEffect(() => {
-    if (resultMy.data) {
-      //console.log('b->', resultMy.data)
-      setBooks(resultMy.data.allBooks)
+    if (result.data) {
+      //console.log('b->', result.data)
+      setBooks(result.data.allBooks)
     }
-  }, [resultMy.data])
+  }, [result.data])
 
   if (!props.show) {
     return null
@@ -31,7 +29,7 @@ const RecommendendBooks = (props) => {
   return (
     <div>
       <h2>recommendations</h2>
-      <p>books in your favorite genre <b>{(genre) ? genre : 'all genres'}</b></p>
+      <p>books in your favorite genre <b>{user.data.me.favoriteGenre}</b></p>
       <table>
         <tbody>
           <tr>

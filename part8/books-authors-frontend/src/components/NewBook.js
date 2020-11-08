@@ -39,7 +39,8 @@ const NewBook = (props) => {
   }
 
   const addGenre = () => {
-    setGenres(genres.concat(genre))
+    if (genre !== '')
+      setGenres(genres.concat(genre))
     setGenre('')
   }
 
