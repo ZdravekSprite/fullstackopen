@@ -1,29 +1,29 @@
-const multiplicator = (a: number, b: number, printText: string) => {
-  console.log(printText, a * b);
+interface MultiplyValues {
+  value1: number;
+  value2: number;
 }
 
-multiplicator(2, 4, 'Multiplied numbers 2 and 4, the result is:');
+const parseArguments = (args: Array<string>): MultiplyValues => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+  if (args.length > 4) throw new Error('Too many arguments');
 
-type Operation = 'multiply' | 'add' | 'divide';
-
-type Result = number;
-
-const calculator = (a: number, b: number, op: Operation): Result => {
-  switch (op) {
-    case 'multiply':
-      return a * b;
-    case 'divide':
-      if (b === 0) throw new Error('Can\'t divide by 0!');
-      return a / b;
-    case 'add':
-      return a + b;
-    default:
-      throw new Error('Operation is not multiply, add or divide!');
+  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+    return {
+      value1: Number(args[2]),
+      value2: Number(args[3])
+    }
+  } else {
+    throw new Error('Provided values were not numbers!');
   }
 }
 
+const multiplicator = (a: number, b: number, printText: string) => {
+  console.log(printText,  a * b);
+}
+
 try {
-  console.log(calculator(1, 5, 'divide'))
+  const { value1, value2 } = parseArguments(process.argv);
+  multiplicator(value1, value2, `Multiplied ${value1} and ${value2}, the result is:`);
 } catch (e) {
-  console.log('Something went wrong, error message: ', e.message);
+  console.log('Error, something bad happened, message: ', e.message);
 }
