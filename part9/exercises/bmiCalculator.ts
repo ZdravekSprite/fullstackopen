@@ -1,10 +1,9 @@
-
-interface MultiplyValues {
+interface BmiMultiplyValues {
   value1: number;
   value2: number;
 }
 
-const parseArguments = (args: Array<string>): MultiplyValues => {
+const bmiParseArguments = (args: Array<string>): BmiMultiplyValues => {
   if (args.length < 4) throw new Error('Not enough arguments');
   if (args.length > 4) throw new Error('Too many arguments');
 
@@ -22,9 +21,9 @@ const parseArguments = (args: Array<string>): MultiplyValues => {
   }
 }
 
-type Result = String;
+type BmiResult = String;
 
-const calculateBmi = (height: number, weight: number): Result => {
+const calculateBmi = (height: number, weight: number): BmiResult => {
   const bmi = weight * 10000 / (height * height)
   if (bmi < 15) {
     return 'Very severely underweight';
@@ -41,13 +40,13 @@ const calculateBmi = (height: number, weight: number): Result => {
   } else if (bmi < 40) {
     return 'Obese Class II (Severely obese)';
   }
-  return 'Obese Class III (Very severely obese)'
+  return 'Obese Class III (Very severely obese)';
 }
 
 //console.log(calculateBmi(180, 74))
 
 try {
-  const { value1, value2 } = parseArguments(process.argv);
+  const { value1, value2 } = bmiParseArguments(process.argv);
   //calculateBmi(value1, value2);
   console.log(calculateBmi(value1, value2));
 } catch (e) {
