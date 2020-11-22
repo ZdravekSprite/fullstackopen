@@ -25,16 +25,16 @@ const bmiParseArguments = (args: Array<string>): BmiMultiplyValues => {
 type BmiResult = {
   height: number,
   weight: number,
-  bmi: String
+  bmi: string
 };
 
 const calculateBmi = (height: number, weight: number): BmiResult => {
-  const bmi = weight * 10000 / (height * height)
+  const bmi = weight * 10000 / (height * height);
   const bmiObject = {
     weight: weight,
     height: height,
     bmi: ''
-  }
+  };
   if (bmi < 15) {
     bmiObject.bmi = 'Very severely underweight';
   } else if (bmi < 16) {
@@ -53,7 +53,7 @@ const calculateBmi = (height: number, weight: number): BmiResult => {
     bmiObject.bmi = 'Obese Class III (Very severely obese)';
   }
   return bmiObject;
-}
+};
 /*
 //console.log(calculateBmi(180, 74))
 

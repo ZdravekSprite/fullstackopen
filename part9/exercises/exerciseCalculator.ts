@@ -4,16 +4,15 @@ interface ExerciseMultiplyValues {
 }
 
 const exerciseParseArguments = (args: Array<string>): ExerciseMultiplyValues => {
-  let value1 = [];
-  let value2;
   if (args.length < 4) throw new Error('Not enough arguments');
-  for (var i = 2; i < args.length; i++) {
+  const value1 = [];
+  if (isNaN(Number(args[2]))) {
+    throw new Error('Provided values were not numbers!');
+  }
+  const value2 = Number(args[2]);
+  for (let i = 3; i < args.length; i++) {
     if (!isNaN(Number(args[i]))) {
-      if (i === 2) {
-        value2 = Number(args[i]);
-      } else {
-        value1.push(Number(args[i]));
-      }
+      value1.push(Number(args[i]));
     } else {
       throw new Error('Provided values were not numbers!');
     }
@@ -21,8 +20,8 @@ const exerciseParseArguments = (args: Array<string>): ExerciseMultiplyValues => 
   return {
     value1: value1,
     value2: value2
-  }
-}
+  };
+};
 
 interface ExerciseResult {
   periodLength: number;
@@ -67,7 +66,7 @@ const calculateExercises = (exerciseHours: number[], target: number): ExerciseRe
     target,
     average
   };
-}
+};
 
 //console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
 
@@ -76,5 +75,6 @@ try {
   //calculateExercises(value1, value2);
   console.log(calculateExercises(value1, value2));
 } catch (e) {
-  console.log('Error, something bad happened, message: ', e.message);
+  console.error('Error, something bad happened, message: ', e);
+  //console.error('Error, something bad happened, message: ', e.message);
 }
