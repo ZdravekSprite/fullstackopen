@@ -1,3 +1,4 @@
+/*
 interface ExerciseMultiplyValues {
   value1: number[];
   value2: number;
@@ -22,7 +23,7 @@ const exerciseParseArguments = (args: Array<string>): ExerciseMultiplyValues => 
     value2: value2
   };
 };
-
+*/
 interface ExerciseResult {
   periodLength: number;
   trainingDays: number;
@@ -53,7 +54,7 @@ const calculateExercises = (exerciseHours: number[], target: number): ExerciseRe
     ratingDescription = 'not too bad but could be better';
     rating = 2;
   } else {
-    ratingDescription = "try next time";
+    ratingDescription = "bad";
     rating = 1;
   }
 
@@ -69,7 +70,7 @@ const calculateExercises = (exerciseHours: number[], target: number): ExerciseRe
 };
 
 //console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
-
+/*
 try {
   const { value1, value2 } = exerciseParseArguments(process.argv);
   //calculateExercises(value1, value2);
@@ -78,3 +79,5 @@ try {
   console.error('Error, something bad happened, message: ', e);
   //console.error('Error, something bad happened, message: ', e.message);
 }
+*/
+export { calculateExercises };
