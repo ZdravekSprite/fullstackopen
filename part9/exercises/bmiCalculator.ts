@@ -1,3 +1,4 @@
+/*
 interface BmiMultiplyValues {
   value1: number;
   value2: number;
@@ -20,29 +21,40 @@ const bmiParseArguments = (args: Array<string>): BmiMultiplyValues => {
     throw new Error('Provided values were not numbers!');
   }
 }
-
-type BmiResult = String;
+*/
+type BmiResult = {
+  height: number,
+  weight: number,
+  bmi: String
+};
 
 const calculateBmi = (height: number, weight: number): BmiResult => {
   const bmi = weight * 10000 / (height * height)
-  if (bmi < 15) {
-    return 'Very severely underweight';
-  } else if (bmi < 16) {
-    return 'Severely underweight';
-  } else if (bmi < 18.5) {
-    return 'Underweight';
-  } else if (bmi < 25) {
-    return 'Normal (healthy weight)';
-  } else if (bmi < 30) {
-    return 'Overweight';
-  } else if (bmi < 35) {
-    return 'Obese Class I (Moderately obese)';
-  } else if (bmi < 40) {
-    return 'Obese Class II (Severely obese)';
+  const bmiObject = {
+    weight: weight,
+    height: height,
+    bmi: ''
   }
-  return 'Obese Class III (Very severely obese)';
+  if (bmi < 15) {
+    bmiObject.bmi = 'Very severely underweight';
+  } else if (bmi < 16) {
+    bmiObject.bmi = 'Severely underweight';
+  } else if (bmi < 18.5) {
+    bmiObject.bmi = 'Underweight';
+  } else if (bmi < 25) {
+    bmiObject.bmi = 'Normal (healthy weight)';
+  } else if (bmi < 30) {
+    bmiObject.bmi = 'Overweight';
+  } else if (bmi < 35) {
+    bmiObject.bmi = 'Obese Class I (Moderately obese)';
+  } else if (bmi < 40) {
+    bmiObject.bmi = 'Obese Class II (Severely obese)';
+  } else {
+    bmiObject.bmi = 'Obese Class III (Very severely obese)';
+  }
+  return bmiObject;
 }
-
+/*
 //console.log(calculateBmi(180, 74))
 
 try {
@@ -52,3 +64,5 @@ try {
 } catch (e) {
   console.log('Error, something bad happened, message: ', e.message);
 }
+*/
+export { calculateBmi };
