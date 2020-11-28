@@ -12,6 +12,7 @@ import PatientListPage from "./PatientListPage";
 const App: React.FC = () => {
   const [, dispatch] = useStateValue();
   React.useEffect(() => {
+    // eslint-disable-next-line
     axios.get<void>(`${apiBaseUrl}/ping`);
 
     const fetchPatientList = async () => {
@@ -24,6 +25,7 @@ const App: React.FC = () => {
         console.error(e);
       }
     };
+    // eslint-disable-next-line
     fetchPatientList();
   }, [dispatch]);
 

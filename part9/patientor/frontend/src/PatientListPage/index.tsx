@@ -31,7 +31,9 @@ const PatientListPage: React.FC = () => {
       dispatch({ type: "ADD_PATIENT", payload: newPatient });
       closeModal();
     } catch (e) {
+      // eslint-disable-next-line
       console.error(e.response.data);
+      // eslint-disable-next-line
       setError(e.response.data.error);
     }
   };
