@@ -1,10 +1,12 @@
-[
+import { DiaryEntry } from "../types";
+
+const diaryEntries: Array<DiaryEntry> = [
   {
-    "id": 1,
-    "date": "2017-01-01",
-    "weather": "rainy",
-    "visibility": "poor",
-    "comment": "Pretty scary flight, I'm glad I'm alive"
+      "id": 1,
+      "date": "2017-01-01",
+      "weather": "rainy",
+      "visibility": "poor",
+      "comment": "Pretty scary flight, I'm glad I'm alive"
   },
   {
     "id": 2,
@@ -27,4 +29,6 @@
     "visibility": "good",
     "comment": "I almost failed the landing but I survived"
   }
-]
+];
+
+export default diaryEntries;
