@@ -7,8 +7,16 @@ router.get('/', (_req, res) => {
   res.send(patientService.getNonSensitiveEntries());
 });
 
-router.post('/', (_req, res) => {
-    res.send('Saving a diagnose!');
+router.post('/', (req, res) => {
+  const { name, dateOfBirth, ssn, gender, occupation } = req.body;
+  const newDiaryEntry = patientService.addEntry(
+    name,
+    dateOfBirth,
+    ssn,
+    gender,
+    occupation,
+  );
+  res.json(newDiaryEntry);
 });
 
 export default router;
