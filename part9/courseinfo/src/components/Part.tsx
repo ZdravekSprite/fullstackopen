@@ -28,6 +28,13 @@ const Part: React.FC<{ part: CoursePart }> = ({ part }) => {
           {part.exerciseSubmissionLink}
         </p>
       );
+    case 'My course':
+      return (
+        <p>
+          {part.name} {part.description} {part.exerciseCount}{' '}
+          {part.studentEnrolled}
+        </p>
+      );
     default:
       return assertNever(part);
   }

@@ -1,5 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import Header from './components/Header';
+import Content from './components/Content';
+import Total from './components/Total';
 import { CoursePart } from './types';
 
 const App: React.FC = () => {
@@ -22,25 +25,20 @@ const App: React.FC = () => {
       exerciseCount: 14,
       description: "Confusing description",
       exerciseSubmissionLink: "https://fake-exercise-submit.made-up-url.dev"
+    },
+    {
+      name: 'My course',
+      exerciseCount: 1,
+      description: 'My course about me',
+      studentEnrolled: 1
     }
   ];
 
   return (
     <div>
-      <h1>{courseName}</h1>
-      <p>
-        {courseParts[0].name} {courseParts[0].exerciseCount}
-      </p>
-      <p>
-        {courseParts[1].name} {courseParts[1].exerciseCount}
-      </p>
-      <p>
-        {courseParts[2].name} {courseParts[2].exerciseCount}
-      </p>
-      <p>
-        Number of exercises{" "}
-        {courseParts.reduce((carry, part) => carry + part.exerciseCount, 0)}
-      </p>
+      <Header name={courseName} />
+      <Content parts={courseParts} />
+      <Total parts={courseParts} />
     </div>
   );
 };

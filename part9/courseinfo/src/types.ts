@@ -28,4 +28,9 @@ interface CoursePartThree extends CoursePartBaseWithDescription {
   exerciseSubmissionLink: string;
 }
 
-export type CoursePart = CoursePartOne | CoursePartTwo | CoursePartThree;
+interface CoursePartFour extends CoursePartBaseWithDescription {
+  name: 'My course';
+  studentEnrolled: number;
+}
+
+export type CoursePart = CoursePartOne | CoursePartTwo | CoursePartThree | CoursePartFour;
