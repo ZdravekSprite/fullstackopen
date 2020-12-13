@@ -5,7 +5,13 @@ import { Action } from "./reducer";
 
 export type State = {
   patients: { [id: string]: Patient };
+  //patients: { [id: string]: Patient | undefined };
 };
+/*
+interface State {
+  patients: Map<string, Patient>;
+}
+*/
 
 const initialState: State = {
   patients: {}
