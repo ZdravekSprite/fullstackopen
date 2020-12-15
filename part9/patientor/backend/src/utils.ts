@@ -1,4 +1,4 @@
-import { NewPatientEntry, Gender } from './types';
+import { NewPatient, Gender } from './types';
 
 const isString = (text: any): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -47,14 +47,16 @@ const parseOccupation = (occupation: any): string => {
   return occupation;
 };
 
-const toNewPatientEntry = (object: any): NewPatientEntry => {
+const toNewPatient = (object: any): NewPatient => {
   return {
     name: parseName(object.name),
     dateOfBirth: parseDOB(object.dateOfBirth),
     ssn: parseSSN(object.ssn),
     gender: parseGender(object.gender),
-    occupation: parseOccupation(object.occupation)
+    occupation: parseOccupation(object.occupation),
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    entries: object.entries
   };
 };
 
-export default toNewPatientEntry;
+export default toNewPatient;
