@@ -4,10 +4,11 @@ import { Container, Icon } from "semantic-ui-react";
 import { useParams } from "react-router-dom";
 import { Patient, Gender } from "../types";
 import { apiBaseUrl } from "../constants";
+import { setPatient, useStateValue } from "../state";
 
 const PatientPage: React.FC = () => {
 
-  const [patient, setPatient] = React.useState<Patient>();
+  const [{ patient }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
 
   React.useEffect(() => {
@@ -15,9 +16,10 @@ const PatientPage: React.FC = () => {
       try {
         const { data: patientData } = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`);
         console.log("Set patient:", patientData);
-        setPatient(patientData);
+        dispatch(setPatient(patientData));
       } catch (e) {
-        console.error(e);
+        // eslint-disable-next-line
+      console.error(e.response.data);
       }
     };
     // eslint-disable-next-line
