@@ -29,6 +29,7 @@ const PatientListPage: React.FC = () => {
         `${apiBaseUrl}/patients`,
         values
       );
+      // eslint-disable-next-line
       dispatch(addPatient(newPatient));
       closeModal();
     } catch (e) {
