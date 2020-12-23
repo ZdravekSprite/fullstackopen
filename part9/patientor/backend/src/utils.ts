@@ -1,4 +1,13 @@
-import { NewPatient, Gender } from './types';
+import {
+  NewPatient,
+  Gender,
+  newEntry,
+  BaseEntry,
+  Diagnose,
+  HospitalEntry,
+  OccupationalHealthcareEntry,
+  HealthCheckEntry
+} from './types';
 
 const isString = (text: any): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -59,4 +68,79 @@ const toNewPatient = (object: any): NewPatient => {
   };
 };
 
-export default toNewPatient;
+const isNewBaseEntry = (entry: any): entry is BaseEntry => {
+  if (entry.diagnosisCodes) {
+    if (!parseDiagnosis(entry.diagnosisCodes)) {
+      throw new Error(`Incorrect Diagnosis Code ${entry.diagnosis}`);
+    }
+  }
+
+  if (
+    !entry ||
+    !isString(entry.description) ||
+    !isDate(entry.date) ||
+    !isString(entry.specialist)
+  ) {
+    throw new Error('Incorrect description, date or specialist');
+  }
+
+  return entry;
+};
+
+const parseDiagnosis = (
+  diagnosisCodes: any
+): diagnosisCodes is Array<Diagnose['code']> => {
+  return diagnosisCodes.every((diagnosisCode: any) => isString(diagnosisCode));
+};
+
+const isHospitalEntry = (entry: any): entry is HospitalEntry => {
+  if (entry.discharge) {
+    return (
+      Object.keys(entry.discharge).includes('date') &&
+      Object.keys(entry.discharge).includes('criteria')
+    );
+  }
+  return false;
+};
+
+const isOccupationalHealthcareEntry = (
+  entry: any
+): entry is OccupationalHealthcareEntry => {
+  if (entry.employerName) {
+    if (entry.sickLeave) {
+      return (
+        Object.keys(entry.sickLeave).includes('startDate') &&
+        Object.keys(entry.sickLeave).includes('endDate')
+      );
+    }
+    return true;
+  }
+  return false;
+};
+
+const isHealthCheckEntry = (entry: any): entry is HealthCheckEntry => {
+  if (
+    entry.healthCheckRating === undefined &&
+    !isString(entry.healthCheckRating)
+  ) {
+    return false;
+  }
+  return entry;
+};
+
+const toNewEntry = (object: any): newEntry => {
+  if (!isNewBaseEntry(object)) {
+    throw new Error(`Not base entry ${object}`);
+  }
+  if (isHospitalEntry(object)) {
+    return object;
+  } else if (isOccupationalHealthcareEntry(object)) {
+    return object;
+  } else if (isHealthCheckEntry(object)) {
+    return object;
+  } else {
+    throw new Error(`Not an entry from the above types.`);
+  }
+};
+
+export default { toNewPatient, toNewEntry };
