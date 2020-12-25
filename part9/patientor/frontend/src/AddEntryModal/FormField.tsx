@@ -1,11 +1,11 @@
 import React from 'react';
 import { ErrorMessage, Field, FieldProps, FormikProps } from 'formik';
 import { Dropdown, DropdownProps, Form } from 'semantic-ui-react';
-import { Diagnose, Gender } from '../types';
+import { EntryType } from '../types';
+import { useStateValue } from '../state';
 
-// structure of a single option
-export type GenderOption = {
-  value: Gender;
+export type EntryTypeOption = {
+  value: EntryType;
   label: string;
 };
 
@@ -13,7 +13,7 @@ export type GenderOption = {
 type SelectFieldProps = {
   name: string;
   label: string;
-  options: GenderOption[];
+  options: EntryTypeOption[];
 };
 
 export const SelectField: React.FC<SelectFieldProps> = ({
@@ -42,15 +42,17 @@ export const TextField: React.FC<TextProps> = ({
   field,
   label,
   placeholder,
-}) => (
-  <Form.Field>
-    <label>{label}</label>
-    <Field placeholder={placeholder} {...field} />
-    <div style={{ color: 'red' }}>
-      <ErrorMessage name={field.name} />
-    </div>
-  </Form.Field>
-);
+}) => {
+  return (
+    <Form.Field>
+      <label>{label}</label>
+      <Field placeholder={placeholder} {...field} />
+      <div style={{ color: 'red' }}>
+        <ErrorMessage name={field.name} />
+      </div>
+    </Form.Field>
+  );
+};
 
 /*
   for exercises 9.24.-
@@ -79,14 +81,14 @@ export const NumberField: React.FC<NumberProps> = ({
 );
 
 export const DiagnosisSelection = ({
-  diagnoses,
   setFieldValue,
   setFieldTouched,
 }: {
-  diagnoses: Diagnose[];
   setFieldValue: FormikProps<{ diagnosisCodes: string[] }>['setFieldValue'];
   setFieldTouched: FormikProps<{ diagnosisCodes: string[] }>['setFieldTouched'];
 }) => {
+  const [{ diagnosis }] = useStateValue();
+
   const field = 'diagnosisCodes';
   const onChange = (
     _event: React.SyntheticEvent<HTMLElement, Event>,
@@ -96,7 +98,7 @@ export const DiagnosisSelection = ({
     setFieldValue(field, data.value);
   };
 
-  const stateOptions = diagnoses.map((diagnosis) => ({
+  const stateOptions = Object.values(diagnosis).map((diagnosis) => ({
     key: diagnosis.code,
     text: `${diagnosis.name} (${diagnosis.code})`,
     value: diagnosis.code,

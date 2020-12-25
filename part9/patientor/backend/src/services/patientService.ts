@@ -1,48 +1,45 @@
+import patients from '../../data/patients';
 import { v4 as uuid } from 'uuid';
-import patients from '../../data/patients'
-import { Patient, PublicPatient, NewPatient, newEntry, Entry } from '../types';
+import { Entry, NewEntry, Patient, PublicPatient, NewPatient } from '../types';
 
 const getPatients = (): Array<Patient> => {
   return patients;
 };
 
-const getPublicPatients = (): PublicPatient[] => {
-  return patients.map(({ id, name, dateOfBirth, gender, occupation, entries }) => ({
-    id,
-    name,
-    dateOfBirth,
-    gender,
-    occupation,
-    entries
+const getPublicPatient = (): Array<PublicPatient> => {
+  return patients.map((patient) => ({
+    id: patient.id,
+    name: patient.name,
+    dateOfBirth: patient.dateOfBirth,
+    gender: patient.gender,
+    occupation: patient.occupation,
   }));
 };
 
-const addPatient = ( patient: NewPatient ): Patient => {
-  const newPatient = {
-    id: uuid(),
-    ...patient
-  };
+const findPatientById = (id: string): Patient | undefined => {
+  return patients.find((patient) => patient.id === id);
+};
+
+const addNewPatient = (patient: NewPatient): PublicPatient => {
+  const newPatient = { ...patient, id: uuid() };
   patients.push(newPatient);
   return newPatient;
 };
 
-const postEntry = (newEntry: newEntry, patientID: string): Entry => {
-  const id = uuid();
-  const entryWithID = { ...newEntry, id };
-  patients.forEach((patient) => {
-    if (patient.id === patientID) {
-      patient.entries.push(entryWithID);
-      return patient;
-    }
-    return patient;
-  });
-
-  return entryWithID;
+const addNewEntry = (entry: NewEntry, id: string): Entry => {
+  const newEntry = { ...entry, id: uuid() };
+  const patient = patients.find((patient) => patient.id === id);
+  if (!patient) {
+    throw new Error(`patient not found by id: ${id}`);
+  }
+  patient.entries.push(newEntry);
+  return newEntry;
 };
 
 export default {
   getPatients,
-  getPublicPatients,
-  addPatient,
-  postEntry
+  getPublicPatient,
+  findPatientById,
+  addNewPatient,
+  addNewEntry,
 };

@@ -1,14 +1,14 @@
-import React from "react";
-import axios from "axios";
-import { Container, Table, Button } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { Container, Table, Button } from 'semantic-ui-react';
 
-import { PatientFormValues } from "../AddPatientModal/AddPatientForm";
-import AddPatientModal from "../AddPatientModal";
-import { Patient } from "../types";
-import { apiBaseUrl } from "../constants";
-import HealthRatingBar from "../components/HealthRatingBar";
-import { addPatient, useStateValue } from "../state";
+import { PatientFormValues } from '../AddPatientModal/AddPatientForm';
+import AddPatientModal from '../AddPatientModal';
+import { Patient } from '../types';
+import { apiBaseUrl } from '../constants';
+import HealthRatingBar from '../components/HealthRatingBar';
+import { useStateValue, addPatient } from '../state';
 
 const PatientListPage: React.FC = () => {
   const [{ patients }, dispatch] = useStateValue();
@@ -29,20 +29,16 @@ const PatientListPage: React.FC = () => {
         `${apiBaseUrl}/patients`,
         values
       );
-      // eslint-disable-next-line
       dispatch(addPatient(newPatient));
       closeModal();
     } catch (e) {
-      // eslint-disable-next-line
-      console.error(e.response.data);
-      // eslint-disable-next-line
-      setError(e.response.data.error);
+      console.error(e);
     }
   };
 
   return (
-    <div className="App">
-      <Container textAlign="center">
+    <div className='App'>
+      <Container textAlign='center'>
         <h3>Patient list</h3>
       </Container>
       <Table celled>

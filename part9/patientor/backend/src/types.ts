@@ -1,19 +1,14 @@
-export type NonLatinDiagnose = Omit<Diagnose, 'latin'>;
-
 export interface Diagnose {
   code: string,
   name: string,
   latin?: string
 }
+
 export enum Gender {
   Male = 'male',
   Female = 'female',
   Other = 'other'
 }
-
-export type NoSsnPatient = Omit<Patient, 'ssn'>;
-
-export type NewPatient = Omit<Patient, 'id'>;
 
 export interface BaseEntry {
   id: string;
@@ -30,49 +25,61 @@ export enum HealthCheckRating {
   'CriticalRisk' = 3
 }
 
+export enum EntryType {
+  HealthCheck = 'HealthCheck',
+  Hospital = 'Hospital',
+  OccupationalHealthcare = 'OccupationalHealthcare',
+}
+
 export interface HealthCheckEntry extends BaseEntry {
   type: 'HealthCheck';
   healthCheckRating: HealthCheckRating;
 }
 
+export interface Discharge {
+  date: string;
+  criteria: string;
+}
+
 export interface HospitalEntry extends BaseEntry {
   type: 'Hospital';
-  discharge: {
-    date: string;
-    criteria: string;
-  };
+  discharge: Discharge;
 }
+
+export interface SickLeave {
+  startDate: string;
+  endDate: string;
+}
+
 export interface OccupationalHealthcareEntry extends BaseEntry {
   type: 'OccupationalHealthcare';
   employerName: string;
-  sickLeave?: {
-    startDate: string;
-    endDate: string;
-  };
+  sickLeave?: SickLeave;
 }
-
-export type newHealthCheckEntry = Omit<HealthCheckEntry, 'id'>;
-export type newHospitalEntry = Omit<HospitalEntry, 'id'>;
-export type newOccupationalHealthcareEntry = Omit<OccupationalHealthcareEntry, 'id'>;
-
-export type newEntry =
-  | newHealthCheckEntry
-  | newHospitalEntry
-  | newOccupationalHealthcareEntry;
 
 export type Entry =
   | HospitalEntry
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
 
+export type NewHospitalEntry = Omit<HospitalEntry, 'id'>;
+export type NewOccupationalHealthcareEntry = Omit<OccupationalHealthcareEntry, 'id'>;
+export type NewHealthCheckEntry = Omit<HealthCheckEntry, 'id'>;
+
+export type NewEntry =
+  | NewHospitalEntry
+  | NewOccupationalHealthcareEntry
+  | NewHealthCheckEntry;
+
 export interface Patient {
-  id: string,
-  name: string,
-  dateOfBirth: string,
-  ssn: string,
-  gender: Gender,
-  occupation: string,
-  entries: Entry[]
+  id: string;
+  name: string;
+  dateOfBirth: string;
+  ssn: string;
+  gender: Gender;
+  occupation: string;
+  entries: Entry[];
 }
 
+export type NewPatient = Omit<Patient, 'id'>;
 export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>;

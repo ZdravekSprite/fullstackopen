@@ -1,93 +1,51 @@
-import React from "react";
-import { Grid, Button } from "semantic-ui-react";
-import { Field, Formik, Form } from "formik";
-import { useStateValue } from "../state";
-import { TextField, DiagnosisSelection } from "../AddPatientModal/FormField";
-import { HospitalEntry } from "../types";
+import React from 'react';
 
-export type EntryFormValues = Omit<HospitalEntry, "id">;
+import { EntryTypeOption } from './FormField';
+import { NewEntry, EntryType } from '../types';
+import HealthCheckForm from './HealthCheckForm';
+import HospitalForm from './HospitalForm';
+import OccupationalHealthcareForm from './OccupationalHealthcareForm';
+
+export type EntryFormValues = NewEntry;
 
 interface Props {
   onSubmit: (values: EntryFormValues) => void;
   onCancel: () => void;
 }
 
+const entryTypeOptions: EntryTypeOption[] = [
+  { value: EntryType.HealthCheck, label: 'HealthCheck' },
+  { value: EntryType.Hospital, label: 'Hospital' },
+  { value: EntryType.OccupationalHealthcare, label: 'OccupationalHealthcare' },
+];
+
 export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
-  const [{ diagnosisList }] = useStateValue();
+  const [entryType, setEntryType] = React.useState('HealthCheck' as EntryType);
 
   return (
-    <Formik
-      initialValues={{
-        type: "Hospital",
-        description: "",
-        specialist: "",
-        date: "",
-        diagnosisCodes: [],
-        discharge: { date: "", criteria: "" },
-      }}
-      onSubmit={onSubmit}
-      validate={values => {
-        const requiredError = "Field is required";
-        const errors: { [field: string]: string } = {};
-        if (!values.description) {
-          errors.description = requiredError;
-        }
-        if (!values.specialist) {
-          errors.specialist = requiredError;
-        }
-        if (!values.date) {
-          errors.date = requiredError;
-        }
-        return errors;
-      }}
-    >
-      {({ isValid, dirty, setFieldValue, setFieldTouched }) => {
-        return (
-          <Form className="form ui">
-            <Field
-              label="Description"
-              placeholder="Description"
-              name="description"
-              component={TextField}
-            />
-            <Field
-              label="Specialist"
-              placeholder="Specialist"
-              name="specialist"
-              component={TextField}
-            />
-            <Field
-              label="Date"
-              placeholder="YYYY-MM-DD"
-              name="date"
-              component={TextField}
-            />
-            <DiagnosisSelection
-              setFieldValue={setFieldValue}
-              setFieldTouched={setFieldTouched}
-              diagnoses={Object.values(diagnosisList)}
-            />
-            <Grid>
-              <Grid.Column floated="left" width={5}>
-                <Button type="button" onClick={onCancel} color="red">
-                  Cancel
-                </Button>
-              </Grid.Column>
-              <Grid.Column floated="right" width={5}>
-                <Button
-                  type="submit"
-                  floated="right"
-                  color="green"
-                  disabled={!dirty || !isValid}
-                >
-                  Add
-                </Button>
-              </Grid.Column>
-            </Grid>
-          </Form>
-        );
-      }}
-    </Formik>
+    <div>
+      <h5>Entry Type</h5>
+      <select
+        value={entryType}
+        onChange={({ target }) => setEntryType(target.value as EntryType)}
+        className='ui dropdown'
+      >
+        {entryTypeOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label || option.value}
+          </option>
+        ))}
+      </select>
+      {entryType === 'HealthCheck' && (
+        <HealthCheckForm onSubmit={onSubmit} onCancel={onCancel} />
+      )}
+      {entryType === 'Hospital' && (
+        <HospitalForm onSubmit={onSubmit} onCancel={onCancel} />
+      )}
+      {entryType === 'OccupationalHealthcare' && (
+        <OccupationalHealthcareForm onSubmit={onSubmit} onCancel={onCancel} />
+      )}
+    </div>
   );
 };
 

@@ -1,23 +1,21 @@
-import React, { createContext, useContext, useReducer } from "react";
-import { Patient, Diagnosis } from "../types";
+import React, { createContext, useContext, useReducer } from 'react';
+import { Patient, Diagnose } from '../types';
 
-import { Action } from "./reducer";
+import { Action } from './reducer';
 
 export type State = {
   patients: { [id: string]: Patient };
-  patient: Patient | undefined;
-  diagnosisList: { [code: string]: Diagnosis };
+  diagnosis: { [code: string]: Diagnose };
 };
 
 const initialState: State = {
   patients: {},
-  patient: undefined,
-  diagnosisList: {}
+  diagnosis: {},
 };
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([
   initialState,
-  () => initialState
+  () => initialState,
 ]);
 
 type StateProviderProps = {
@@ -27,7 +25,7 @@ type StateProviderProps = {
 
 export const StateProvider: React.FC<StateProviderProps> = ({
   reducer,
-  children
+  children,
 }: StateProviderProps) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return (
@@ -36,5 +34,5 @@ export const StateProvider: React.FC<StateProviderProps> = ({
     </StateContext.Provider>
   );
 };
-// eslint-disable-next-line
+
 export const useStateValue = () => useContext(StateContext);

@@ -1,38 +1,42 @@
 import express from 'express';
 import patientService from '../services/patientService';
-import utils from '../utils';
+import { toNewPatient, toNewEntry } from '../utils';
 
 const router = express.Router();
 
 router.get('/', (_req, res) => {
-  res.send(patientService.getPublicPatients());
+  res.send(patientService.getPublicPatient());
 });
 
-router.get('/:id', (req,res) => {
-  res.send(patientService.getPatients().find(patient => patient.id === req.params.id));
+router.get('/:id', (req, res) => {
+  const id = req.params.id;
+  const patient = patientService.findPatientById(id);
+
+  if (patient) {
+    res.send(patient);
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 router.post('/', (req, res) => {
-  console.log(req.body);
   try {
-    const newPatientEntry = utils.toNewPatient(req.body);
-
-    const addedEntry = patientService.addPatient(newPatientEntry);
-    res.json(addedEntry);
+    const newPatient = toNewPatient(req.body);
+    const addedPatient = patientService.addNewPatient(newPatient);
+    res.json(addedPatient);
   } catch (e) {
-    res.status(400).send(e.message);
-  }
-})
-
-router.post('/:id/entries', (req, res) => {
-  try {
-    const newEntry = utils.toNewEntry(req.body);
-    const patientId = req.params.id;
-    const addedEntry = patientService.postEntry(newEntry, patientId);
-    res.json(addedEntry);
-  } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).send(e);
   }
 });
 
+router.post('/:id/entries', (req, res) => {
+  const id = req.params.id;
+  try {
+    const newEntry = toNewEntry(req.body);
+    const addedEntry = patientService.addNewEntry(newEntry, id);
+    res.json(addedEntry);
+  } catch (e) {
+    res.status(400).send(e);
+  }
+});
 export default router;
